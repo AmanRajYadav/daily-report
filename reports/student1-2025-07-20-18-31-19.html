@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Summary - anaya</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', Arial, sans-serif; line-height: 1.6; color: #2c3e50; background-color: #f4f7f6; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 30px; text-align: center; }
+        .title { font-size: 2.5em; font-weight: 700; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .subtitle { font-size: 1.2em; opacity: 0.9; font-weight: 300; }
+        .student-info { background: #f8f9ff; padding: 25px 30px; border-left: 5px solid #667eea; }
+        .student-info h3 { color: #667eea; font-size: 1.3em; margin-bottom: 15px; font-weight: 600; }
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .info-item { display: flex; align-items: center; font-size: 0.95em; }
+        .info-icon { font-size: 1.2em; margin-right: 10px; width: 25px; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 35px; }
+        .section-header { display: flex; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #667eea; }
+        .section-icon { font-size: 2em; margin-right: 15px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .section-title { font-size: 1.4em; font-weight: 600; }
+        .greeting-box { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); padding: 25px; border-radius: 15px; text-align: center; }
+        .learning-content { background: #f8f9ff; padding: 25px; border-radius: 15px; border-left: 5px solid #667eea; }
+        .subject-title { font-size: 1.2em; font-weight: 600; color: #667eea; margin-bottom: 15px; }
+        .activity-card { background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%); padding: 25px; border-radius: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .activity-title { font-size: 1.2em; font-weight: 600; margin-bottom: 15px; }
+        .activity-item { margin-bottom: 15px; }
+        .activity-label { font-weight: 600; display: block; margin-bottom: 5px; }
+        .parent-report { background: linear-gradient(135deg, #d1f2eb 0%, #a8e6cf 100%); padding: 25px; border-radius: 15px; border-left: 5px solid #00b894; }
+        .parent-title { font-size: 1.2em; font-weight: 600; color: #00b894; margin-bottom: 20px; text-align: center; }
+        .parent-item { margin-bottom: 15px; }
+        .parent-label { font-weight: 600; display: block; margin-bottom: 5px; }
+        .quiz-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; text-align: center; }
+        .quiz-title { font-size: 1.3em; font-weight: 600; margin-bottom: 15px; }
+        .quiz-link { display: inline-block; background: white; color: #667eea; padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; margin-top: 10px; transition: all 0.3s ease; box-shadow: 0 3px 10px rgba(0,0,0,0.2); }
+        .quiz-link:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .footer { background: #2c3e50; color: white; padding: 25px 30px; text-align: center; }
+        .footer-title { font-size: 1.1em; font-weight: 600; margin-bottom: 10px; }
+        .footer-details { font-size: 0.9em; opacity: 0.8; line-height: 1.4; }
+        @media print { body { background: white; padding: 0; } .container { box-shadow: none; border-radius: 0; } }
+        
+        /* PDF Margin Control */
+        @page {
+            margin: 25px;
+        }
+        
+        @page :first {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">📚 CLASS SUMMARY</div>
+            <div class="subtitle">Fluence Learning System</div>
+        </div>
+        <div class="student-info">
+            <h3>👤 Student Information</h3>
+            <div class="info-grid">
+                <div class="info-item"><span class="info-icon">🎓</span><strong>Student:</strong> anaya</div>
+                <div class="info-item"><span class="info-icon">📅</span><strong>Date:</strong> 21 July 2025</div>
+                <div class="info-item"><span class="info-icon">🆔</span><strong>Student ID:</strong> student1</div>
+                <div class="info-item"><span class="info-icon">🕐</span><strong>Time:</strong> 06:32 PM</div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="section">
+                <div class="section-header"><span class="section-icon">🌟</span><h2 class="section-title">Student Greeting</h2></div>
+                <div class="greeting-box">🌟 Amazing work today, Anaya! You wrote a fantastic and exciting story about the jungle safari, using so many new verbs. Your creative storytelling is really improving! 🚀</div>
+            </div>
+            <div class="section">
+                <div class="section-header"><span class="section-icon">📖</span><h2 class="section-title">Today's Learning</h2></div>
+                <div class="learning-content">
+                    <div class="subject-title">English Grammar: Becoming a Master Storyteller with Tenses</div>
+                    <p>Today's adventure was all about giving your words time-traveling powers! We discovered that verb tenses are more than just rules; they are tools to paint a clearer picture. We learned the difference between an action happening RIGHT NOW (Present Continuous, like 'I **am watching** the tiger') and an action that has been going on FOR A WHILE (Present Perfect Continuous, like 'I **have been watching** the tiger for ten minutes'). We also uncovered a cool secret: groups like a 'department' or a 'team' are treated as one single thing in grammar, so we say 'The department **has** decided,' not 'have decided.' This skill will make your writing, especially your reports for the new science club, sound much more professional!</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header"><span class="section-icon">🎯</span><h2 class="section-title">Fun Activity Time!</h2></div>
+                <div class="activity-card">
+                    <div class="activity-title">🎯 The Ecoscience Club Reporter Mission</div>
+                    <div class="activity-item"><span class="activity-label">🎮 What To Do:</span>Your mission, should you choose to accept it: Be the official reporter for your new Ecoscience club! Step 1: Imagine one amazing experiment you'll do, like making a mini-volcano or generating electricity with a potato. Step 2: Write three sentences to describe it. In the first sentence, use the Present Continuous ('is/are __-ing') to say what is happening at the peak of the experiment. In the second, use the Present Perfect Continuous ('has/have been __-ing') to say what you've been doing all afternoon to prepare. Step 3: Draw a picture of your experiment in action!</div>
+                    <div class="activity-item"><span class="activity-label">💡 Why It's Awesome:</span>This activity is amazing because it helps your brain build stronger and faster connections for choosing the right tense. You'll develop your scientific communication skills while having fun. Plus, you can show your family your report and teach them about your cool future experiments!</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header"><span class="section-icon">👨‍👩‍👧‍👦</span><h2 class="section-title">Parent Report</h2></div>
+                <div class="parent-report">
+                    <div class="parent-title">📋 Class Summary for Parents</div>
+                    <div class="parent-item"><span class="parent-label">🎯 Class Focus:</span>Development of advanced verb tenses (Present Perfect Continuous) and subject-verb agreement through interactive exercises and creative writing.</div>
+                    <div class="parent-item"><span class="parent-label">📚 Content Covered:</span>Key concepts: Differentiating between actions happening now (e.g., 'The volcano is erupting!') and actions that occurred over a period of time ('We have been mixing the chemicals all day'). We also clarified that collective nouns like 'department' or 'government' are treated as singular subjects. Anaya applied these concepts by writing a creative story about a jungle safari.</div>
+                    <div class="parent-item"><span class="parent-label">📝 Homework Assignment:</span>The 'Ecoscience Club Reporter Mission' (detailed in Anaya's summary). This task reinforces today's grammar concepts by connecting them directly to her personal interest in the new school club. Expected time: 10-15 minutes.</div>
+                    <div class="parent-item"><span class="parent-label">💬 Additional Notes:</span>💡 Breakthrough moment: Anaya showed wonderful persistence and creativity during the jungle safari writing task. She successfully used a challenging list of verbs to build a cohesive narrative. Growth area: We are focusing on automatically identifying collective nouns (like 'team', 'group', 'department') as singular. This is a tricky concept, and repeated, positive correction is key. Ask your child: 'What was the most exciting part of the jungle story you wrote today?' To support at home: When you're doing an activity together (like cooking), you can say, 'We **are stirring** the batter now. We **have been cooking** for almost an hour!' This models the different tenses in a natural, everyday way.</div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-header"><span class="section-icon">🎮</span><h2 class="section-title">Interactive Quiz</h2></div>
+                <div class="quiz-section">
+                    <div class="quiz-title">🏆 Test Your Knowledge!</div>
+                    <p>Ready to show what you've learned? Take today's interactive quiz and earn points!</p>
+                    <a href="https://amanrajyadav.github.io/fluence-quiz/" class="quiz-link">🚀 Start Quiz Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="footer-title">✨ Generated by Fluence Learning System</div>
+            <div class="footer-details">
+                📅 21 July 2025 at 06:32 PM<br>
+                🌟 Making Learning Fun & Effective!<br>
+                🎓 Empowering Education Through Technology
+            </div>
+        </div>
+    </div>
+</body>
+</html>
