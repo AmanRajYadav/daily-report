@@ -1,0 +1,15 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="owlEyes">
+      <stop offset="0%" style="stop-color:#4ECDC4"/>
+      <stop offset="100%" style="stop-color:#44A3AA"/>
+    </radialGradient>
+  </defs>
+  <!-- Owl with constellation eyes -->
+  <g id="owl-idle">
+    <!-- Body, wings, constellation patterns -->
+  </g>
+  <g id="owl-blink" style="display:none">
+    <!-- Blinking animation frames -->
+  </g>
+</svg>
