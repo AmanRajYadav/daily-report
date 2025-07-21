@@ -1,0 +1,120 @@
+{
+  "students": {
+    "student1": {
+      "name": "Anaya",
+      "id": "student1",
+      "preferences": {
+        "favoriteAnimal": "fox",
+        "themePreference": "cosmic",
+        "colorHue": 210,
+        "soundEnabled": true,
+        "language": "en",
+        "readingSpeed": 0.9
+      },
+      "achievements": {
+        "totalVisits": 0,
+        "streakDays": 0,
+        "unlockedCreatures": ["star"],
+        "specialBadges": []
+      },
+      "parentContact": {
+        "phone": "+917999502978",
+        "preferredTime": "evening",
+        "language": "hi"
+      }
+    },
+    "student2": {
+      "name": "Kavya",
+      "id": "student2",
+      "preferences": {
+        "favoriteAnimal": "rabbit",
+        "themePreference": "cosmic",
+        "colorHue": 300,
+        "soundEnabled": true,
+        "language": "en",
+        "readingSpeed": 1.0
+      },
+      "achievements": {
+        "totalVisits": 0,
+        "streakDays": 0,
+        "unlockedCreatures": ["star"],
+        "specialBadges": []
+      },
+      "parentContact": {
+        "phone": "+917999502978",
+        "preferredTime": "evening",
+        "language": "en"
+      }
+    },
+    "student3": {
+      "name": "Mamta",
+      "id": "student3",
+      "preferences": {
+        "favoriteAnimal": "deer",
+        "themePreference": "minimal",
+        "colorHue": 120,
+        "soundEnabled": true,
+        "language": "en",
+        "readingSpeed": 0.85
+      },
+      "achievements": {
+        "totalVisits": 0,
+        "streakDays": 0,
+        "unlockedCreatures": ["star"],
+        "specialBadges": []
+      },
+      "parentContact": {
+        "phone": "+917999502978",
+        "preferredTime": "morning",
+        "language": "hi"
+      }
+    }
+  },
+  "schoolConfig": {
+    "name": "Fluence Learning Center",
+    "timezone": "Asia/Kolkata",
+    "features": {
+      "hindiTranslation": true,
+      "parentReports": true,
+      "arcadeMode": true,
+      "learningTree": true,
+      "achievements": true
+    },
+    "subjectCreatures": {
+      "mathematics": "math-dragon",
+      "science": "science-owl",
+      "english": "english-butterfly",
+      "history": "history-lion",
+      "art": "art-peacock",
+      "default": "star"
+    }
+  },
+  "achievements": {
+    "badges": [
+      {
+        "id": "first-visit",
+        "name": "Welcome Explorer",
+        "description": "Completed your first learning session",
+        "icon": "🌟"
+      },
+      {
+        "id": "week-streak",
+        "name": "Consistent Learner",
+        "description": "7 days learning streak",
+        "icon": "🔥"
+      },
+      {
+        "id": "tree-bloom",
+        "name": "Growing Strong",
+        "description": "Your learning tree bloomed",
+        "icon": "🌳"
+      },
+      {
+        "id": "all-creatures",
+        "name": "Creature Master",
+        "description": "Met all subject creatures",
+        "icon": "🦄"
+      }
+    ]
+  }
+}
