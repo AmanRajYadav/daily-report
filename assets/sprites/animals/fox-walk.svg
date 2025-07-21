@@ -1,0 +1,21 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .leg { transform-origin: 50% 0%; }
+      @keyframes walk {
+        0% { transform: rotate(-15deg); }
+        50% { transform: rotate(15deg); }
+        100% { transform: rotate(-15deg); }
+      }
+    </style>
+  </defs>
+  <g id="fox-body">
+    <!-- Main body -->
+    <ellipse cx="40" cy="60" rx="25" ry="15" fill="#FF6B35"/>
+    <!-- Head -->
+    <circle cx="20" cy="50" r="12" fill="#FF6B35"/>
+    <!-- Legs with animation -->
+    <rect class="leg" id="leg1" x="25" y="65" width="5" height="15"/>
+    <!-- More body parts... -->
+  </g>
+</svg>
