@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="minimal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Dear Student · Learning Universe</title>
+    <meta name="description" content="A magical learning journey">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="../assets/sounds/ambient/morning-forest.mp3" as="audio">
+    <link rel="preload" href="../assets/sprites/creatures/math-dragon.svg" as="image">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/themes/minimal.css" id="theme-stylesheet">
+    
+    <style>
+        /* Dynamic student color */
+        :root {
+            --student-hue: 18;
+            --student-accent: hsl(var(--student-hue), 70%, 60%);
+            --student-accent-soft: hsl(var(--student-hue), 60%, 95%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="magic-circle">
+                <svg viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="80" class="circle-outer" />
+                    <circle cx="100" cy="100" r="60" class="circle-middle" />
+                    <circle cx="100" cy="100" r="40" class="circle-inner" />
+                </svg>
+            </div>
+            <p class="loading-text">Preparing your magical journey...</p>
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon-minimal">✨</span>
+        <span class="theme-icon-cosmic">🌙</span>
+    </button>
+
+    <!-- Living Background -->
+    <div class="universe-container">
+        <!-- WebGL Canvas for advanced effects -->
+        <canvas id="magicCanvas"></canvas>
+        
+        <!-- Parallax Layers -->
+        <div class="parallax-layer" data-depth="0.1">
+            <div class="clouds"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.3">
+            <div class="floating-elements"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.5">
+            <div class="fireflies"></div>
+        </div>
+        
+        <!-- Seasonal Overlay -->
+        <div class="seasonal-overlay" id="seasonalOverlay"></div>
+    </div>
+
+    <!-- Learning Tree (Fixed Position) -->
+    <div class="learning-tree-container">
+        <div class="tree-stage" id="learningTree">
+            <!-- Tree will be drawn here by tree.js -->
+        </div>
+        <div class="tree-info">
+            <span class="visits-count">Visit #<span id="visitNumber">1</span></span>
+            <span class="tree-stage-name" id="treeStageName">Seedling</span>
+        </div>
+    </div>
+
+    <!-- Walking Animals Container -->
+    <div class="animals-container" id="animalsContainer">
+        <!-- Animated sprites will be added by creatures.js -->
+    </div>
+
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+        <button class="audio-ambient active" id="ambientToggle" aria-label="Toggle ambient sounds">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+            </svg>
+        </button>
+        <div class="volume-slider">
+            <input type="range" id="volumeControl" min="0" max="100" value="50">
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-particles" id="heroParticles"></div>
+            
+            <div class="date-badge floating">22 July 2025</div>
+            
+            <h1 class="student-name magical-text">
+                Dear Student
+                <span class="name-sparkles"></span>
+            </h1>
+            
+            <p class="hero-greeting">Welcome back to your learning universe</p>
+            
+            <!-- Student Avatar with Aura -->
+            <div class="student-avatar-container">
+                <div class="avatar-aura"></div>
+                <div class="student-avatar" id="studentAvatar">
+                    <div class="avatar-inner" data-initial="S"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Reflection -->
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="star">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M24 4l5.5 11.1L42 17l-9 8.8L35.1 38 24 32.2 12.9 38 15 25.8 6 17l12.5-1.9z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Today's Reflection</h2>
+            </header>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="reflection-text">
+                    🌟 Amazing work today, Mamta! You tackled some really tough questions and kept going even when it was challenging. Your persistence in trying to figure out those patterns is a real strength! 🚀
+                </p>
+            </div>
+            
+            <div class="tap-hint">Tap to hear • Long press for Hindi</div>
+        </section>
+
+        <!-- Learning Content -->
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="math-dragon">
+            <div class="card-background-effect"></div>
+            
+            <!-- Subject Creature -->
+            <div class="subject-creature-container">
+                <div class="creature-home" id="creatureHome">
+                    <!-- Animated creature will be loaded here -->
+                </div>
+            </div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M4 6h8c2.2 0 4 1.8 4 4v28c0-1.7-1.3-3-3-3H4V6zm40 0h-8c-2.2 0-4 1.8-4 4v28c0-1.7 1.3-3 3-3h9V6z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">What We Explored</h2>
+            </header>
+            
+            <div class="subject-badge magical-badge">Math & Social Science: The Secret Patterns of Numbers and People</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="learning-content">
+                    Today's adventure was all about being a detective! We started with a mission: why do things form patterns? We discovered that square numbers (like 9, 16, 25) aren't just multiplication facts; they hide a secret identity as the sum of odd numbers (1+3+5+7+9 = 25)! We also explored another cool pattern called the 'up and down' sequence. The coolest part was seeing this same 'pattern' idea in people. We learned how a single thing, like the epic story of the Mahabharata, can have one central theme but be told in over 100 different ways in just one state! This connects to how we see the world – learning to spot the underlying 'rule' or 'story' is a superpower for understanding everything from science to history.
+                </p>
+            </div>
+        </section>
+
+        
+        <!-- Activity Section -->
+        <section class="content-card floating-card activity-card" data-sound="chime" data-creature="rocket">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <circle cx="24" cy="24" r="20" class="clock-circle"/>
+                        <path class="clock-hand" d="M24 12v12l8 4"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Your Mission</h2>
+            </header>
+            
+            <div class="mission-name">🎯 Home Detective: Pattern Hunter!</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <div class="mission-description">
+                    <p>Your mission: Uncover a hidden pattern in your own home! Step 1 (Math Detective): Grab some coins or buttons. Can you build the square number 16? Now, what single odd number do you need to add to turn it into the NEXT square number, 25? Try showing it visually! Step 2 (Culture Detective): Ask a family member about a festival or special food they love. Ask them how another family they know (from a different region or culture) celebrates or makes it differently. Step 3 (Connect the Clues): Think about how the festival/food is like the Mahabharata – how is it the same at its core, but different in the details?</p>
+                </div>
+                
+                <div class="mission-motivation">
+                    <span class="sparkle-text">✨ Why it's amazing:</span>
+                    <p>This activity is amazing because it helps your brain build stronger connections between abstract ideas (like numbers) and the real world (like culture). You'll be training your brain to be a better detective, spotting patterns everywhere, and you'll have a great conversation with your family! It's way more than just learning facts.</p>
+                </div>
+            </div>
+            
+            <!-- Hidden treasure that appears on shake -->
+            <div class="hidden-treasure" id="hiddenTreasure">
+                <span class="treasure-emoji">🎁</span>
+                <p class="treasure-message">Secret discovered! You're amazing!</p>
+            </div>
+        </section>
+
+        
+        <!-- Parent Update -->
+        <section class="content-card floating-card parent-card" data-sound="notification">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M31 28v-4c0-3.3-2.7-6-6-6h-10c-3.3 0-6 2.7-6 6v4"/>
+                        <circle cx="20" cy="10" r="6"/>
+                        <path d="M39 28v-4c0-2.8-1.9-5.1-4.5-5.8"/>
+                        <path d="M33 4.2c2.6.7 4.5 3 4.5 5.8s-1.9 5.1-4.5 5.8"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Family Update</h2>
+            </header>
+            
+            <div class="parent-report-grid">
+                <div class="report-item">
+                    <h3 class="report-label">Today's Focus</h3>
+                    <p>Development of analytical thinking by identifying and articulating patterns in both mathematics and cultural studies.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Progress Made</h3>
+                    <p>Key concepts: 1) Square numbers as sums of consecutive odd numbers. 2) The concept of 'Unity in Diversity' using the saree and adaptations of Indian epics as concrete examples. 3) The importance of providing specific evidence and examples in an answer, rather than just general statements.</p>
+                </div>
+                
+                
+                <div class="report-item">
+                    <h3 class="report-label">Home Practice</h3>
+                    <p>The 'Home Detective: Pattern Hunter' activity. This fun, 15-minute task encourages the student to apply the day's core lesson—pattern recognition—to their immediate environment, reinforcing the concepts in a low-pressure, hands-on way.</p>
+                </div>
+                
+                
+                
+                <div class="report-item">
+                    <h3 class="report-label">Special Notes</h3>
+                    <p>💡 Breakthrough moment: Mamta showed great persistence today. Despite finding the concepts difficult and expressing frustration, she continued to engage with the problems. This resilience is crucial for learning. Growth area: We are working on articulating the 'why' behind an answer, not just the 'what'. This is a shift from simple calculation to true analytical thinking. Ask your child about the idea that there are 100 different versions of the same story in one part of India. To support at home: When you see a pattern (in tiles on the floor, in a song, in a daily routine), point it out and ask, 'What's the rule here?' This playfully reinforces today's core skill.</p>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- Arcade Portal -->
+        <section class="arcade-portal-section">
+            <div class="portal-container">
+                <div class="portal-rings">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                </div>
+                
+                <a href="https://amanrajyadav.github.io/fluence-quiz/" class="arcade-button magical-button">
+                    <span class="button-bg"></span>
+                    <span class="button-text">Enter Learning Arcade</span>
+                    <span class="button-icon">🎮</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Shake Message Overlay -->
+    <div class="shake-overlay" id="shakeOverlay">
+        <div class="stardust-container" id="stardustContainer"></div>
+        <div class="shake-message">
+            <h3>✨ Magic Unlocked! ✨</h3>
+            <p>You found a hidden surprise!</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/universe.js"></script>
+    <script src="../assets/js/creatures.js"></script>
+    <script src="../assets/js/audio.js"></script>
+    <script src="../assets/js/particles.js"></script>
+    <script src="../assets/js/tree.js"></script>
+    <script src="../assets/js/magic.js"></script>
+    
+    <script>
+        // Initialize with student data
+        window.STUDENT_DATA = {
+            name: 'Dear Student',
+            id: 'student',
+            hue: 18,
+            subject: 'Math & Social Science: The Secret Patterns of Numbers and People',
+            visitCount: parseInt(localStorage.getItem('visits_student') || '0') + 1
+        };
+        
+        // Start the magic
+        document.addEventListener('DOMContentLoaded', () => {
+            Universe.init();
+        });
+    </script>
+</body>
+</html>
