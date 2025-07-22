@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="minimal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Dear Student · Learning Universe</title>
+    <meta name="description" content="A magical learning journey">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="../assets/sounds/ambient/morning-forest.mp3" as="audio">
+    <link rel="preload" href="../assets/sprites/creatures/star.svg" as="image">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/themes/minimal.css" id="theme-stylesheet">
+    
+    <style>
+        /* Dynamic student color */
+        :root {
+            --student-hue: 18;
+            --student-accent: hsl(var(--student-hue), 70%, 60%);
+            --student-accent-soft: hsl(var(--student-hue), 60%, 95%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="magic-circle">
+                <svg viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="80" class="circle-outer" />
+                    <circle cx="100" cy="100" r="60" class="circle-middle" />
+                    <circle cx="100" cy="100" r="40" class="circle-inner" />
+                </svg>
+            </div>
+            <p class="loading-text">Preparing your magical journey...</p>
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon-minimal">✨</span>
+        <span class="theme-icon-cosmic">🌙</span>
+    </button>
+
+    <!-- Living Background -->
+    <div class="universe-container">
+        <!-- WebGL Canvas for advanced effects -->
+        <canvas id="magicCanvas"></canvas>
+        
+        <!-- Parallax Layers -->
+        <div class="parallax-layer" data-depth="0.1">
+            <div class="clouds"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.3">
+            <div class="floating-elements"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.5">
+            <div class="fireflies"></div>
+        </div>
+        
+        <!-- Seasonal Overlay -->
+        <div class="seasonal-overlay" id="seasonalOverlay"></div>
+    </div>
+
+    <!-- Learning Tree (Fixed Position) -->
+    <div class="learning-tree-container">
+        <div class="tree-stage" id="learningTree">
+            <!-- Tree will be drawn here by tree.js -->
+        </div>
+        <div class="tree-info">
+            <span class="visits-count">Visit #<span id="visitNumber">1</span></span>
+            <span class="tree-stage-name" id="treeStageName">Seedling</span>
+        </div>
+    </div>
+
+    <!-- Walking Animals Container -->
+    <div class="animals-container" id="animalsContainer">
+        <!-- Animated sprites will be added by creatures.js -->
+    </div>
+
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+        <button class="audio-ambient active" id="ambientToggle" aria-label="Toggle ambient sounds">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+            </svg>
+        </button>
+        <div class="volume-slider">
+            <input type="range" id="volumeControl" min="0" max="100" value="50">
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-particles" id="heroParticles"></div>
+            
+            <div class="date-badge floating">23 July 2025</div>
+            
+            <h1 class="student-name magical-text">
+                Dear Student
+                <span class="name-sparkles"></span>
+            </h1>
+            
+            <p class="hero-greeting">Welcome back to your learning universe</p>
+            
+            <!-- Student Avatar with Aura -->
+            <div class="student-avatar-container">
+                <div class="avatar-aura"></div>
+                <div class="student-avatar" id="studentAvatar">
+                    <div class="avatar-inner" data-initial="S"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Reflection -->
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="star">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M24 4l5.5 11.1L42 17l-9 8.8L35.1 38 24 32.2 12.9 38 15 25.8 6 17l12.5-1.9z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Today's Reflection</h2>
+            </header>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="reflection-text">
+                    🌟 Amazing work today, Kavya! You became a true Geometry Detective by discovering the 'secret code' of shapes. Your ability to make connections, like calling a ray 'half a line', is really improving! 🚀
+                </p>
+            </div>
+            
+            <div class="tap-hint">Tap to hear • Long press for Hindi</div>
+        </section>
+
+        <!-- Learning Content -->
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="star">
+            <div class="card-background-effect"></div>
+            
+            <!-- Subject Creature -->
+            <div class="subject-creature-container">
+                <div class="creature-home" id="creatureHome">
+                    <!-- Animated creature will be loaded here -->
+                </div>
+            </div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M4 6h8c2.2 0 4 1.8 4 4v28c0-1.7-1.3-3-3-3H4V6zm40 0h-8c-2.2 0-4 1.8-4 4v28c0-1.7 1.3-3 3-3h9V6z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">What We Explored</h2>
+            </header>
+            
+            <div class="subject-badge magical-badge">Geometry: Unlocking the Secret Code of the Universe</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="learning-content">
+                    Today's adventure: We learned that everything around us is built from a few simple ideas, just like a secret code. We discovered a **point**, which is like a single, exact spot on a GPS map. We also explored the difference between a **line segment** (like the edge of your notebook, with a clear start and end) and a **line** (which stretches on forever!). The coolest part was when you realized a flashlight beam is a perfect model for a **ray**—starting at one point and zooming off forever in one direction. This is the foundation for understanding every shape you'll ever see and will help you think like an engineer or an artist.
+                </p>
+            </div>
+        </section>
+
+        
+        <!-- Activity Section -->
+        <section class="content-card floating-card activity-card" data-sound="chime" data-creature="rocket">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <circle cx="24" cy="24" r="20" class="clock-circle"/>
+                        <path class="clock-hand" d="M24 12v12l8 4"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Your Mission</h2>
+            </header>
+            
+            <div class="mission-name">🎯 Geometry Detective: The Real World Mission</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <div class="mission-description">
+                    <p>Your mission: Hunt for the secret code of shapes in your own home! Step 1: Find and take a picture (or draw) 3 real-world examples of a **point**. Step 2: Find and list 3 real-world examples of a **line segment**. Step 3: Grab a flashlight in a dark room and describe how its beam shows exactly what a **ray** is. Bonus challenge: Can you find an object where at least two lines cross at a single point?</p>
+                </div>
+                
+                <div class="mission-motivation">
+                    <span class="sparkle-text">✨ Why it's amazing:</span>
+                    <p>This activity is amazing because it helps your brain see that math isn't just in books—it's the blueprint for the world around us. You'll develop a sharper eye for detail and learn to see the world like a designer. Plus, you can show your family the 'secret code' and teach them what you discovered!</p>
+                </div>
+            </div>
+            
+            <!-- Hidden treasure that appears on shake -->
+            <div class="hidden-treasure" id="hiddenTreasure">
+                <span class="treasure-emoji">🎁</span>
+                <p class="treasure-message">Secret discovered! You're amazing!</p>
+            </div>
+        </section>
+
+        
+        <!-- Parent Update -->
+        <section class="content-card floating-card parent-card" data-sound="notification">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M31 28v-4c0-3.3-2.7-6-6-6h-10c-3.3 0-6 2.7-6 6v4"/>
+                        <circle cx="20" cy="10" r="6"/>
+                        <path d="M39 28v-4c0-2.8-1.9-5.1-4.5-5.8"/>
+                        <path d="M33 4.2c2.6.7 4.5 3 4.5 5.8s-1.9 5.1-4.5 5.8"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Family Update</h2>
+            </header>
+            
+            <div class="parent-report-grid">
+                <div class="report-item">
+                    <h3 class="report-label">Today's Focus</h3>
+                    <p>Development of foundational geometric reasoning through guided discovery and real-world analogies.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Progress Made</h3>
+                    <p>Key concepts: **Point** (an exact location, like on a map), **Line Segment** (a finite piece of a line, like a shelf), **Line** (infinite in two directions), and **Ray** (infinite in one direction, like a sunbeam). We used hands-on drawing and relatable examples like flashlights to ensure deep understanding.</p>
+                </div>
+                
+                
+                <div class="report-item">
+                    <h3 class="report-label">Home Practice</h3>
+                    <p>Kavya's homework includes: 1) The 'Geometry Detective' activity (find 3 real-world examples each of points/line segments, describe a flashlight's ray). 2) Read the next Science chapter, 'Materials around us'. 3) Play assigned learning games for ~15 minutes. 4) Complete 5 review problems from Math Chapter 1. The Geometry activity should take about 10-15 minutes.</p>
+                </div>
+                
+                
+                
+                <div class="report-item">
+                    <h3 class="report-label">Special Notes</h3>
+                    <p>💡 Breakthrough moment: Kavya had a fantastic 'aha!' moment when she independently described a ray as 'half of a line.' This shows she's not just memorizing, but truly conceptualizing. Growth area: We'll continue building on these foundational concepts to ensure the distinctions (especially between line, segment, and ray) become automatic. Ask your child about the 'big secret' she discovered with two points and a ruler - she'll love sharing! To support at home: When you see straight edges or paths, casually ask, 'Is that more like a line segment or a ray?'</p>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- Arcade Portal -->
+        <section class="arcade-portal-section">
+            <div class="portal-container">
+                <div class="portal-rings">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                </div>
+                
+                <a href="https://amanrajyadav.github.io/fluence-quiz/" class="arcade-button magical-button">
+                    <span class="button-bg"></span>
+                    <span class="button-text">Enter Learning Arcade</span>
+                    <span class="button-icon">🎮</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Shake Message Overlay -->
+    <div class="shake-overlay" id="shakeOverlay">
+        <div class="stardust-container" id="stardustContainer"></div>
+        <div class="shake-message">
+            <h3>✨ Magic Unlocked! ✨</h3>
+            <p>You found a hidden surprise!</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/universe.js"></script>
+    <script src="../assets/js/creatures.js"></script>
+    <script src="../assets/js/audio.js"></script>
+    <script src="../assets/js/particles.js"></script>
+    <script src="../assets/js/tree.js"></script>
+    <script src="../assets/js/magic.js"></script>
+    
+    <script>
+        // Initialize with student data
+        window.STUDENT_DATA = {
+            name: 'Dear Student',
+            id: 'student',
+            hue: 18,
+            subject: 'Geometry: Unlocking the Secret Code of the Universe',
+            visitCount: parseInt(localStorage.getItem('visits_student') || '0') + 1
+        };
+        
+        // Start the magic
+        document.addEventListener('DOMContentLoaded', () => {
+            Universe.init();
+        });
+    </script>
+</body>
+</html>
