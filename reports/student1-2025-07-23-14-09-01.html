@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Anaya · Daily Journey</title>
+    <meta name="description" content="A magical space for learning reflection">
+    
+    <!-- Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital@0;1&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Design System */
+        :root {
+            --paper: #FDFCF8;
+            --ink: #2C2C2C;
+            --whisper: #A8A29E;
+            --accent: hsl(234, 60%, 65%);
+            --accent-soft: hsl(234, 60%, 95%);
+            --shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+            --season: 'summer';
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Ambient Canvas */
+        #ambient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Seasonal Overlays */
+        .seasonal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.6;
+        }
+
+        /* Gentle Cursor */
+        .cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s var(--ease-out);
+            mix-blend-mode: multiply;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-soft);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.3s var(--ease-out);
+            opacity: 0.5;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Learning Tree */
+        .learning-tree {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            height: 150px;
+            z-index: 4;
+            opacity: 0.8;
+        }
+
+        #tree-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: gentleFadeIn 1s 0.5s var(--ease-out) forwards;
+        }
+
+        @keyframes gentleFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .date-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .student-name {
+            font-family: 'EB Garamond', serif;
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        .calligraphy-flourish {
+            position: absolute;
+            top: -20px;
+            right: -30px;
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: var(--accent);
+            opacity: 0.6;
+            animation: flourishDance 4s ease-in-out infinite;
+        }
+
+        @keyframes flourishDance {
+            0%, 100% { transform: rotate(-5deg) scale(1); }
+            50% { transform: rotate(5deg) scale(1.1); }
+        }
+
+        .greeting {
+            color: var(--whisper);
+            font-size: 1.125rem;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 48px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: gentleFadeIn 1s var(--ease-out) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--accent) 0%, 
+                var(--accent-soft) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .content-card:hover::before {
+            opacity: 1;
+        }
+
+        .content-card[data-delay="1"] { animation-delay: 0.6s; }
+        .content-card[data-delay="2"] { animation-delay: 0.8s; }
+        .content-card[data-delay="3"] { animation-delay: 1.0s; }
+        .content-card[data-delay="4"] { animation-delay: 1.2s; }
+
+        .section-title {
+            font-family: 'EB Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            opacity: 0.8;
+        }
+
+        .content-text {
+            color: var(--ink);
+            opacity: 0.85;
+            line-height: 1.8;
+        }
+
+        /* Subject Creatures */
+        .subject-creature {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            top: 20px;
+            right: 20px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.5s var(--ease-out);
+        }
+
+        .content-card:hover .subject-creature {
+            opacity: 0.7;
+            transform: scale(1);
+        }
+
+        /* Subject Pill */
+        .subject-pill {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        /* Arcade Button */
+        .arcade-section {
+            text-align: center;
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .arcade-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 40px;
+            background: var(--ink);
+            color: var(--paper);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s var(--ease-out);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arcade-button::before {
+            content: '✨';
+            position: absolute;
+            font-size: 60px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s var(--ease-out);
+        }
+
+        .arcade-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .arcade-button:hover::before {
+            opacity: 0.1;
+            transform: translateY(-20px);
+        }
+
+        /* Walking Characters */
+        .character-container {
+            position: fixed;
+            bottom: 60px;
+            z-index: 3;
+            width: 100%;
+            height: 60px;
+            pointer-events: none;
+        }
+
+        .walking-character {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            font-size: 2.5rem;
+            right: -60px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .walking-character.active {
+            opacity: 1;
+            animation: walk 20s linear;
+        }
+
+        @keyframes walk {
+            to {
+                transform: translateX(calc(-100vw - 120px));
+            }
+        }
+
+        /* Morphing Shapes */
+        .morph-shape {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .audio-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--accent-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .audio-btn:hover {
+            background: var(--accent-soft);
+            transform: scale(1.1);
+        }
+
+        .audio-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Seasonal Effects */
+        .spring-petal,
+        .summer-sun,
+        .autumn-leaf,
+        .winter-snow {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.7;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            .container {
+                padding: 40px 20px;
+            }
+            
+            .content-card {
+                padding: 32px 24px;
+            }
+            
+            .student-name {
+                font-size: 2.5rem;
+            }
+            
+            .audio-controls {
+                bottom: 80px;
+            }
+        }
+
+        /* Seasonal Animation */
+        @keyframes fall {
+            from {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(calc(100vh + 100px)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient Canvas -->
+    <canvas id="ambient-canvas"></canvas>
+    
+    <!-- Seasonal Overlay -->
+    <div class="seasonal-overlay" id="seasonalOverlay"></div>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor"></div>
+    <div class="cursor-trail" id="cursorTrail"></div>
+    
+    <!-- Walking Characters Container -->
+    <div class="character-container">
+        <div class="walking-character" id="walkingChar">🦊</div>
+    </div>
+    
+    <!-- Learning Tree -->
+    <div class="learning-tree">
+        <svg id="tree-svg" viewBox="0 0 120 150">
+            <defs>
+                <linearGradient id="treeGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#A0522D;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:var(--accent);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:var(--accent-soft);stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <!-- Tree trunk -->
+            <rect x="50" y="100" width="20" height="50" fill="url(#treeGradient)" />
+            <!-- Tree crown (will grow based on progress) -->
+            <g id="treeGrowth">
+                <!-- This will be populated dynamically -->
+            </g>
+        </svg>
+    </div>
+    
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+        <button class="audio-btn" id="musicBtn" title="Ambient Music">🎵</button>
+        <button class="audio-btn" id="soundBtn" title="Sound Effects">🔊</button>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero -->
+        <header class="hero">
+            <div class="date-badge">23 July 2025</div>
+            <h1 class="student-name">
+                Anaya
+                <span class="calligraphy-flourish">✨</span>
+            </h1>
+            <p class="greeting">Welcome back to your learning journey</p>
+        </header>
+        
+        <!-- Today's Achievement -->
+        <article class="content-card" data-delay="1">
+            <h2 class="section-title">
+                <svg class="section-icon animated-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 2l3.09 6.26L26 9.27l-5 4.87 1.18 6.88L16 17.77l-6.18 3.25L11 14.14 6 9.27l6.91-1.01L16 2z">
+                        <animate attributeName="stroke-dasharray" values="0 100;100 0" dur="2s" repeatCount="indefinite"/>
+                    </path>
+                </svg>
+                Today's Reflection
+            </h2>
+            <p class="content-text">
+                🌟 Amazing work today, Anaya! You were so brave tackling those tough math puzzles and practicing your public speaking. Your ability to copy the tone and loudness for the speech was fantastic! 🚀
+            </p>
+        </article>
+        
+        <!-- Learning Content -->
+        <article class="content-card" data-delay="2">
+            <h2 class="section-title">
+                <svg class="section-icon animated-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z">
+                        <animate attributeName="stroke-dasharray" values="0 100;100 0" dur="3s" repeatCount="indefinite"/>
+                    </path>
+                </svg>
+                What We Explored
+            </h2>
+            <div class="subject-creature" id="subjectCreature">
+                <!-- Creature will be set based on subject -->
+            </div>
+            <div class="subject-pill">Language & Logic: Unlocking Superpowers with Words and Numbers!</div>
+            <p class="content-text">
+                Today's adventure was about seeing that grammar and math are secret codes for explaining the world. We discovered how words like 'could', 'would', and 'may' are tools to talk about wishes and things that almost happened, like saying 'I would have eaten Maggie, but there was none!' We also became number detectives and found that some 'impossible' math problems can be solved if you use a secret tool: negative numbers (integers)! This connects your logical thinking in math to your communication skills in English, helping you explain complex ideas clearly.
+            </p>
+        </article>
+        
+        
+        <!-- Activity -->
+        <article class="content-card" data-delay="3">
+            <h2 class="section-title">
+                <svg class="section-icon animated-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="16" cy="16" r="14">
+                        <animate attributeName="stroke-dasharray" values="0 88;88 0" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <path d="M16 8v8l5.5 3">
+                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+                    </path>
+                </svg>
+                Your Mission
+            </h2>
+            <h3 style="font-weight: 500; margin-bottom: 12px; color: var(--accent);">
+                🎯 The 'What If?' Time Traveler
+            </h3>
+            <p class="content-text" style="margin-bottom: 16px;">
+                Your mission: Pretend you are a time traveler who just visited yesterday. Your job is to report back on three things that *almost* happened.
+            </p>
+            <p class="content-text" style="font-style: italic; opacity: 0.8;">
+                This activity is amazing because it helps your brain build stronger connections for tricky grammar like 'would have' and 'could have'. You're not just memorizing rules; you're playing with possibilities and turning yourself into a master storyteller who can talk about what is and what could have been! Plus, you can show your family and teach them what you learned.
+            </p>
+        </article>
+        
+        
+        
+        <!-- Parent Update -->
+        <article class="content-card" data-delay="4">
+            <h2 class="section-title">
+                <svg class="section-icon animated-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                    <path d="M28 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M21 3.13a4 4 0 0 1 0 7.75">
+                        <animate attributeName="opacity" values="1;0.5;1" dur="3s" repeatCount="indefinite"/>
+                    </path>
+                </svg>
+                Family Update
+            </h2>
+            <div style="display: grid; gap: 16px;">
+                <div>
+                    <strong style="color: var(--accent); font-weight: 500;">Focus Area:</strong>
+                    <p class="content-text">Development of nuanced communication using conditional modal verbs and applying logical reasoning to mathematical problems.</p>
+                </div>
+                <div>
+                    <strong style="color: var(--accent); font-weight: 500;">Progress:</strong>
+                    <p class="content-text">Key concepts: 1) Using 'would have' for unfulfilled intentions and 'could have' for past possibilities. 2) Differentiating formal ('May I...?') and polite ('Could you...?') requests. 3) Introducing negative integers as a creative tool to solve seemingly impossible math challenges.</p>
+                </div>
+                
+                <div>
+                    <strong style="color: var(--accent); font-weight: 500;">Home Practice:</strong>
+                    <p class="content-text">The 'What If?' Time Traveler activity: Ask Anaya to write 3-4 sentences describing things that almost happened yesterday using 'would have' and 'could have'. This reinforces complex grammar in a fun, narrative way. Expected time: 5-10 minutes.</p>
+                </div>
+                
+                
+                <div>
+                    <strong style="color: var(--accent); font-weight: 500;">Notes:</strong>
+                    <p class="content-text">💡 Breakthrough moment: Anaya showed incredible adaptability during the public speaking practice. When asked to mimic tone and loudness, she did so immediately, which is a key skill for performance and confident speaking. Growth area: We are focusing on making the use of conditional verbs like 'would have' more automatic. Framing this as a 'time travel' game helps make this abstract concept more concrete and enjoyable. Ask your child about the 'impossible' math problem with the 5-digit numbers—she'll love explaining the secret of how to solve it using a 'minus' number! To support at home: When she asks for something, you can playfully ask, 'How would you say that more politely using 'could'?' This gently reinforces the lesson in everyday situations.</p>
+                </div>
+                
+            </div>
+        </article>
+        
+        
+        <!-- Arcade -->
+        <section class="arcade-section">
+            <a href="https://amanrajyadav.github.io/fluence-quiz/" class="arcade-button" id="arcadeBtn">
+                <span>Enter Learning Arcade</span>
+                <span style="font-size: 1.2rem;">→</span>
+            </a>
+        </section>
+    </div>
+    
+    <script>
+        // Initialize all the interactive features
+        const studentColorHue = 234;
+        const subjectTitle = 'Language & Logic: Unlocking Superpowers with Words and Numbers!'.toLowerCase();
+        
+        // Ambient Canvas Animation
+        class AmbientCanvas {
+            constructor() {
+                this.canvas = document.getElementById('ambient-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.time = 0;
+                this.init();
+            }
+            
+            init() {
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                
+                for (let i = 0; i < 8; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        size: Math.random() * 100 + 50,
+                        speedX: (Math.random() - 0.5) * 0.3,
+                        speedY: (Math.random() - 0.5) * 0.3,
+                        hue: (studentColorHue + Math.random() * 60) % 360,
+                        opacity: Math.random() * 0.3 + 0.1
+                    });
+                }
+                
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.time += 0.01;
+                
+                this.particles.forEach((particle, index) => {
+                    particle.x += particle.speedX + Math.sin(this.time + index) * 0.1;
+                    particle.y += particle.speedY + Math.cos(this.time + index) * 0.1;
+                    
+                    if (particle.x < -particle.size) particle.x = this.canvas.width + particle.size;
+                    if (particle.x > this.canvas.width + particle.size) particle.x = -particle.size;
+                    if (particle.y < -particle.size) particle.y = this.canvas.height + particle.size;
+                    if (particle.y > this.canvas.height + particle.size) particle.y = -particle.size;
+                    
+                    const gradient = this.ctx.createRadialGradient(
+                        particle.x, particle.y, 0,
+                        particle.x, particle.y, particle.size
+                    );
+                    
+                    gradient.addColorStop(0, 'hsla(' + particle.hue + ', 60%, 65%, ' + particle.opacity + ')');
+                    gradient.addColorStop(1, 'hsla(' + particle.hue + ', 60%, 65%, 0)');
+                    
+                    this.ctx.fillStyle = gradient;
+                    this.ctx.fillRect(
+                        particle.x - particle.size,
+                        particle.y - particle.size,
+                        particle.size * 2,
+                        particle.size * 2
+                    );
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Audio Engine
+        class AudioEngine {
+            constructor() {
+                this.context = null;
+                this.isPlaying = false;
+                this.isSoundEnabled = true;
+                this.nodes = {};
+            }
+            
+            init() {
+                if (!this.context) {
+                    this.context = new (window.AudioContext || window.webkitAudioContext)();
+                    this.setupAmbientMusic();
+                }
+            }
+            
+            setupAmbientMusic() {
+                const now = this.context.currentTime;
+                
+                this.nodes.drone = this.context.createOscillator();
+                this.nodes.droneGain = this.context.createGain();
+                this.nodes.drone.type = 'sine';
+                this.nodes.drone.frequency.value = 110;
+                this.nodes.droneGain.gain.value = 0.05;
+                
+                this.nodes.harmony = this.context.createOscillator();
+                this.nodes.harmonyGain = this.context.createGain();
+                this.nodes.harmony.type = 'sine';
+                this.nodes.harmony.frequency.value = 220;
+                this.nodes.harmonyGain.gain.value = 0.03;
+                
+                this.nodes.drone.connect(this.nodes.droneGain);
+                this.nodes.droneGain.connect(this.context.destination);
+                this.nodes.harmony.connect(this.nodes.harmonyGain);
+                this.nodes.harmonyGain.connect(this.context.destination);
+                
+                this.nodes.lfo = this.context.createOscillator();
+                this.nodes.lfoGain = this.context.createGain();
+                this.nodes.lfo.frequency.value = 0.2;
+                this.nodes.lfoGain.gain.value = 0.02;
+                this.nodes.lfo.connect(this.nodes.lfoGain);
+                this.nodes.lfoGain.connect(this.nodes.droneGain.gain);
+                this.nodes.lfoGain.connect(this.nodes.harmonyGain.gain);
+            }
+            
+            playAmbient() {
+                if (!this.isPlaying) {
+                    this.init();
+                    const now = this.context.currentTime;
+                    this.nodes.drone.start(now);
+                    this.nodes.harmony.start(now);
+                    this.nodes.lfo.start(now);
+                    this.isPlaying = true;
+                }
+            }
+            
+            stopAmbient() {
+                if (this.isPlaying) {
+                    const now = this.context.currentTime;
+                    this.nodes.droneGain.gain.exponentialRampToValueAtTime(0.001, now + 1);
+                    this.nodes.harmonyGain.gain.exponentialRampToValueAtTime(0.001, now + 1);
+                    setTimeout(() => {
+                        this.nodes.drone.stop();
+                        this.nodes.harmony.stop();
+                        this.nodes.lfo.stop();
+                        this.isPlaying = false;
+                        this.setupAmbientMusic();
+                    }, 1000);
+                }
+            }
+            
+            playSound(type) {
+                if (!this.isSoundEnabled || !this.context) return;
+                
+                const osc = this.context.createOscillator();
+                const gain = this.context.createGain();
+                const now = this.context.currentTime;
+                
+                osc.connect(gain);
+                gain.connect(this.context.destination);
+                
+                switch(type) {
+                    case 'click':
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(800, now);
+                        osc.frequency.exponentialRampToValueAtTime(400, now + 0.1);
+                        gain.gain.setValueAtTime(0.1, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                        osc.start(now);
+                        osc.stop(now + 0.1);
+                        break;
+                        
+                    case 'hover':
+                        osc.type = 'triangle';
+                        osc.frequency.value = 1200;
+                        gain.gain.setValueAtTime(0.05, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                        osc.start(now);
+                        osc.stop(now + 0.3);
+                        break;
+                        
+                    case 'achieve':
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(523, now);
+                        osc.frequency.setValueAtTime(659, now + 0.1);
+                        osc.frequency.setValueAtTime(784, now + 0.2);
+                        gain.gain.setValueAtTime(0.1, now);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                        osc.start(now);
+                        osc.stop(now + 0.5);
+                        break;
+                }
+            }
+        }
+
+        // Subject Creatures
+        const subjectCreatures = {
+            'math': '🐉',
+            'science': '🦉',
+            'english': '🦋',
+            'history': '🦁',
+            'art': '🦚',
+            'music': '🐦',
+            'default': '⭐'
+        };
+
+        // Walking Characters
+        const walkingCharacters = ['🦊', '🐕', '🐈', '🦆', '🐢', '🦔', '🐰', '🦌'];
+
+        // Learning Tree Growth
+        class LearningTree {
+            constructor() {
+                this.growth = this.calculateGrowth();
+                this.draw();
+            }
+            
+            calculateGrowth() {
+                const visits = parseInt(localStorage.getItem('visits') || '1');
+                return Math.min(visits * 10, 100);
+            }
+            
+            draw() {
+                const treeGrowth = document.getElementById('treeGrowth');
+                const leaves = Math.floor(this.growth / 10);
+                
+                for (let i = 0; i < leaves; i++) {
+                    const leaf = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    const angle = (i * 137.5) * Math.PI / 180;
+                    const radius = 10 + i * 3;
+                    const x = 60 + Math.cos(angle) * radius;
+                    const y = 80 - i * 5 + Math.sin(angle) * radius * 0.5;
+                    
+                    leaf.setAttribute('cx', x);
+                    leaf.setAttribute('cy', y);
+                    leaf.setAttribute('r', 8);
+                    leaf.setAttribute('fill', 'url(#leafGradient)');
+                    leaf.setAttribute('opacity', '0');
+                    
+                    treeGrowth.appendChild(leaf);
+                    
+                    setTimeout(() => {
+                        leaf.setAttribute('opacity', '0.8');
+                        leaf.style.transition = 'opacity 1s ease';
+                    }, i * 100);
+                }
+            }
+        }
+
+        // Initialize Everything
+        document.addEventListener('DOMContentLoaded', () => {
+            const ambient = new AmbientCanvas();
+            const audio = new AudioEngine();
+            const tree = new LearningTree();
+            
+            // Custom cursor
+            const cursor = document.getElementById('cursor');
+            const cursorTrail = document.getElementById('cursorTrail');
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            let trailX = 0, trailY = 0;
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            
+            function animateCursor() {
+                const dx = mouseX - cursorX;
+                const dy = mouseY - cursorY;
+                cursorX += dx * 0.2;
+                cursorY += dy * 0.2;
+                cursor.style.left = cursorX + 'px';
+                cursor.style.top = cursorY + 'px';
+                
+                const tdx = cursorX - trailX;
+                const tdy = cursorY - trailY;
+                trailX += tdx * 0.1;
+                trailY += tdy * 0.1;
+                cursorTrail.style.left = trailX + 'px';
+                cursorTrail.style.top = trailY + 'px';
+                
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+            
+            // Subject creature
+            const creatureEl = document.getElementById('subjectCreature');
+            if (creatureEl) {
+                let creature = subjectCreatures.default;
+                for (const [key, value] of Object.entries(subjectCreatures)) {
+                    if (subjectTitle.includes(key)) {
+                        creature = value;
+                        break;
+                    }
+                }
+                creatureEl.innerHTML = creature;
+            }
+            
+            // Walking character on scroll
+            let scrollTimeout;
+            let lastScrollTop = 0;
+            const walkingChar = document.getElementById('walkingChar');
+            
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset;
+                
+                if (scrollTop > lastScrollTop && scrollTop > 300) {
+                    walkingChar.innerHTML = walkingCharacters[Math.floor(Math.random() * walkingCharacters.length)];
+                    walkingChar.classList.add('active');
+                    
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        walkingChar.classList.remove('active');
+                    }, 20000);
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+            
+            // Audio controls
+            const musicBtn = document.getElementById('musicBtn');
+            const soundBtn = document.getElementById('soundBtn');
+            
+            musicBtn.addEventListener('click', () => {
+                audio.init();
+                if (audio.isPlaying) {
+                    audio.stopAmbient();
+                    musicBtn.classList.remove('active');
+                } else {
+                    audio.playAmbient();
+                    musicBtn.classList.add('active');
+                }
+                audio.playSound('click');
+            });
+            
+            soundBtn.addEventListener('click', () => {
+                audio.isSoundEnabled = !audio.isSoundEnabled;
+                soundBtn.classList.toggle('active', audio.isSoundEnabled);
+                if (audio.isSoundEnabled) {
+                    audio.init();
+                    audio.playSound('achieve');
+                }
+            });
+            
+            // Click effects
+            document.addEventListener('click', (e) => {
+                if (audio.isSoundEnabled) {
+                    audio.playSound('click');
+                }
+                
+                cursor.style.transform = 'scale(2)';
+                setTimeout(() => {
+                    cursor.style.transform = 'scale(1)';
+                }, 200);
+            });
+            
+            // Hover sounds
+            document.querySelectorAll('a, button, .content-card').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    if (audio.isSoundEnabled) {
+                        audio.playSound('hover');
+                    }
+                });
+            });
+            
+            // Device tilt
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', (e) => {
+                    const tiltX = e.gamma / 90;
+                    const tiltY = e.beta / 180;
+                    
+                    document.querySelectorAll('.content-card').forEach(card => {
+                        card.style.transform = 'perspective(1000px) rotateY(' + (tiltX * 3) + 'deg) rotateX(' + (-tiltY * 3) + 'deg)';
+                    });
+                });
+            }
+            
+            // Save visit
+            const visits = parseInt(localStorage.getItem('visits') || '0') + 1;
+            localStorage.setItem('visits', visits.toString());
+            localStorage.setItem('lastVisit', new Date().toISOString());
+            
+            console.log('✨ Learning Journey ✨\nVisit #' + visits + '\nPress M for music, S for sounds');
+        });
+    </script>
+</body>
+</html>
