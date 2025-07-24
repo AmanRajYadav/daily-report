@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="minimal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Mamta · Learning Universe</title>
+    <meta name="description" content="A magical learning journey">
+    
+    <!-- REMOVED: Audio preload to prevent console warnings -->
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/themes/minimal.css" id="theme-stylesheet">
+    
+    <style>
+        /* Enhanced minimal theme with proper card styling */
+        :root {
+            --student-hue: 277.2;
+            --student-accent: hsl(var(--student-hue), 70%, 60%);
+            --student-accent-soft: hsl(var(--student-hue), 60%, 95%);
+            --student-accent-dark: hsl(var(--student-hue), 70%, 45%);
+            --paper-white: #ffffff;
+            --paper-cream: #fafafa;
+            --ink-dark: #1a1a1a;
+            --ink-medium: #4a4a4a;
+            --ink-light: #6b6b6b;
+            --accent-gold: #f59e0b;
+            --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --border-light: 1px solid rgba(0, 0, 0, 0.08);
+            --radius-small: 12px;
+            --radius-medium: 16px;
+        }
+        
+        /* Hero section styling - Both name and greeting white */
+        .student-name {
+            color: white !important;
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+        }
+        
+        .hero-greeting {
+            color: white !important;
+        }
+        
+        /* Completely opaque card styling - no transparency anywhere */
+        .content-card {
+            background: #ffffff !important;
+            border-radius: var(--radius-medium);
+            padding: 48px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-soft);
+            opacity: 1 !important;
+            backdrop-filter: none !important;
+            border: var(--border-light);
+            position: relative;
+        }
+        
+        /* Force all card elements to be opaque */
+        .content-card * {
+            background-color: transparent;
+        }
+        
+        .content-card .card-content {
+            background: transparent !important;
+        }
+        
+        .content-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--student-accent) 0%, var(--student-accent-soft) 100%);
+        }
+        
+        /* Section titles with proper emoji styling */
+        .section-title {
+            font-family: "EB Garamond", serif;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--ink-dark);
+        }
+        
+        .section-title::before {
+            font-size: 1.5rem;
+        }
+        
+        /* Content styling */
+        .card-content {
+            color: var(--ink-medium);
+            line-height: 1.8;
+        }
+        
+        /* Subject badges */
+        .subject-badge, .magical-badge {
+            background: var(--student-accent-soft) !important;
+            color: var(--student-accent);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            display: inline-block;
+            opacity: 1 !important;
+        }
+        
+        /* Override any existing transparency from main CSS */
+        .floating-card {
+            background: #ffffff !important;
+            opacity: 1 !important;
+        }
+        
+        .card-background-effect {
+            display: none !important;
+        }
+        
+        /* Parent report grid */
+        .parent-report-grid {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .report-item {
+            background: var(--paper-cream);
+            padding: 16px;
+            border-radius: var(--radius-small);
+            border: var(--border-light);
+        }
+        
+        .report-label {
+            color: var(--student-accent);
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- REMOVED: Loading screen completely to prevent hanging -->
+
+    <!-- Living Background -->
+    <div class="universe-container">
+        <canvas id="magicCanvas"></canvas>
+        
+        <div class="parallax-layer" data-depth="0.1">
+            <div class="clouds"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.3">
+            <div class="floating-elements"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.5">
+            <div class="fireflies"></div>
+        </div>
+        
+        <!-- REMOVED: Seasonal overlay - no longer needed -->
+    </div>
+
+    <!-- Learning Tree -->
+    <div class="learning-tree-container">
+        <div class="tree-stage" id="learningTree"></div>
+        <div class="tree-info">
+            <span class="visits-count">Visit #<span id="visitNumber">1</span></span>
+            <span class="tree-stage-name" id="treeStageName">Seedling</span>
+        </div>
+    </div>
+
+    <!-- NEW: Top GIF Animals Container -->
+    <div class="top-animals-container" id="topAnimalsContainer">
+        <!-- GIF animals will be added by creatures.js -->
+    </div>
+
+    <!-- Walking Animals Container -->
+    <div class="animals-container" id="animalsContainer">
+        <!-- Animated sprites will be added by creatures.js -->
+    </div>
+
+    <!-- REMOVED: Audio controls - no longer needed -->
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-particles" id="heroParticles"></div>
+            
+            <div class="date-badge floating">24 July 2025</div>
+            
+            <!-- UPDATED: Name now has click animation -->
+            <h1 class="student-name magical-text">
+                Mamta
+                <span class="name-sparkles"></span>
+            </h1>
+            
+            <p class="hero-greeting">Welcome back to your learning universe</p>
+            
+            <!-- Student Avatar -->
+            <div class="student-avatar-container">
+                <div class="avatar-aura"></div>
+                <div class="student-avatar" id="studentAvatar">
+                    <div class="avatar-inner" data-initial="M"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Reflection -->
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="star">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M24 4l5.5 11.1L42 17l-9 8.8L35.1 38 24 32.2 12.9 38 15 25.8 6 17l12.5-1.9z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">💭 Today's Reflection</h2>
+            </header>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="reflection-text">
+                    🌟 Amazing work today, Kavya! You were able to recall key facts like the 'People of India' project and the role of the sari. Your curiosity about how things work, like asking about the PDFs, is fantastic! 🚀
+                </p>
+            </div>
+            
+            <div class="tap-hint">Tap to hear • Long press for Hindi</div>
+        </section>
+
+        <!-- Learning Content -->
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="social-science-dog">
+            <div class="card-background-effect"></div>
+            
+            <!-- Subject Creature -->
+            <div class="subject-creature-container">
+                <div class="creature-home" id="creatureHome">
+                    <!-- Animated creature will be loaded here -->
+                </div>
+            </div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M4 6h8c2.2 0 4 1.8 4 4v28c0-1.7-1.3-3-3-3H4V6zm40 0h-8c-2.2 0-4 1.8-4 4v28c0-1.7 1.3-3 3-3h9V6z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">📚 What We Explored</h2>
+            </header>
+            
+            <div class="subject-badge magical-badge">Social Studies: Uncovering India's Secret Superpower - Unity in Diversity!</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="learning-content">
+                    Today's adventure: We investigated the puzzle of how a country with so many differences can be so united. We discovered that even with different foods, basic ingredients like rice and wheat are shared everywhere, acting as a hidden link. We also explored how a single piece of cloth, the sari, becomes a symbol of connection, worn in countless beautiful ways. The coolest part was learning how ancient stories like the Ramayana and Mahabharata acted like the 'internet' of their time, spreading ideas and values across Asia! This helps you see the hidden connections in the world around you.
+                </p>
+            </div>
+        </section>
+
+        <!-- Dynamic Activity Section -->
+                <section class="content-card floating-card activity-card" data-sound="chime" data-creature="rocket">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <circle cx="24" cy="24" r="20" class="clock-circle"/>
+                        <path class="clock-hand" d="M24 12v12l8 4"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">🎯 Your Mission</h2>
+            </header>
+            
+            <div class="mission-name">🎯 My Family, My Epic: The Legend of Our Home</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <div class="mission-description">
+                    <p>Your mission: Become a modern-day storyteller! Create a 'folk legend' about your own family. Step 1: Ask a parent or grandparent for a fun or important story from their past. Step 2: Imagine a hero (from a movie, book, or history) visiting them during that story. What advice did the hero give? How did they help? Step 3: Draw a one-panel comic of this meeting! Bonus challenge: Write a short paragraph explaining the 'core message' or value of your family legend.</p>
+                </div>
+                
+                <div class="mission-motivation">
+                    <span class="sparkle-text">✨ Why it's amazing:</span>
+                    <p>This activity is amazing because it helps your brain practice connecting big historical ideas to personal stories, just like the tribal communities did with the epics! You'll develop your creativity and storytelling skills while learning about your own family's history. You can even show your family and see what they think of your epic tale!</p>
+                </div>
+            </div>
+            
+            <div class="hidden-treasure" id="hiddenTreasure">
+                <span class="treasure-emoji">🎁</span>
+                <p class="treasure-message">Secret discovered! You're amazing!</p>
+            </div>
+        </section>
+
+        <!-- Dynamic Parent Section -->
+                <section class="content-card floating-card parent-card" data-sound="notification">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M31 28v-4c0-3.3-2.7-6-6-6h-10c-3.3 0-6 2.7-6 6v4"/>
+                        <circle cx="20" cy="10" r="6"/>
+                        <path d="M39 28v-4c0-2.8-1.9-5.1-4.5-5.8"/>
+                        <path d="M33 4.2c2.6.7 4.5 3 4.5 5.8s-1.9 5.1-4.5 5.8"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">👨‍👩‍👧‍👦 Family Update</h2>
+            </header>
+            
+            <div class="parent-report-grid">
+                <div class="report-item">
+                    <h3 class="report-label">Today's Focus</h3>
+                    <p>Development of analytical thinking by exploring the theme of 'Unity in Diversity' in Indian culture.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Progress Made</h3>
+                    <p>Key concepts: The sari as a symbol of shared culture, Makar Sankranti as a festival uniting different regions, and the role of epics (Ramayana/Mahabharata) in creating a common cultural framework. We used analogies like 'social media trends' to make the historical spread of culture relatable.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Home Practice</h3>
+                    <p>Review the three PDF notes from July 7, 8, and 9. This reinforces the concepts of cultural unity through clothing, festivals, and literature, and prepares Kavya for her upcoming test. Expected time: 10-15 minutes.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Special Notes</h3>
+                    <p>💡 Breakthrough moment: Kavya made an excellent connection when she recalled the Makar Sankranti question from her previous quiz, showing she's retaining information between lessons. Growth area: We're working on maintaining focus during the lesson; her energy was a bit low today. Creating a dedicated, distraction-free study space can be very helpful. Ask your child about the 'People of India' project and who they think the 'hero' of the clothing section was - they'll love sharing! To support at home: When watching a movie or show, you could ask, 'What makes their world different from ours? What is something that feels the same?'</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Arcade Portal -->
+        <section class="arcade-portal-section">
+            <div class="portal-container">
+                <div class="portal-rings">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                </div>
+                
+                <a href="https://amanrajyadav.github.io/fluence-quiz/" class="arcade-button magical-button">
+                    <span class="button-bg"></span>
+                    <span class="button-text">Enter Learning Arcade</span>
+                    <span class="button-icon">🎮</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Shake Message Overlay -->
+    <div class="shake-overlay" id="shakeOverlay">
+        <div class="stardust-container" id="stardustContainer"></div>
+        <div class="shake-message">
+            <h3>✨ Magic Unlocked! ✨</h3>
+            <p>You found a hidden surprise!</p>
+        </div>
+    </div>
+
+    <!-- Scripts - UPDATED: Added features.js -->
+    <script src="../assets/js/universe.js"></script>
+    <script src="../assets/js/creatures.js"></script>
+    <script src="../assets/js/audio.js"></script>
+    <script src="../assets/js/particles.js"></script>
+    <script src="../assets/js/tree.js"></script>
+    <script src="../assets/js/features.js"></script>
+    <script src="../assets/js/magic.js"></script>
+    
+    <script>
+        // Initialize with student data
+        window.STUDENT_DATA = {
+            name: 'Mamta',
+            id: 'student3',
+            hue: 277.2,
+            subject: 'Social Studies: Uncovering India's Secret Superpower - Unity in Diversity!',
+            visitCount: parseInt(localStorage.getItem('visits_student3') || '0') + 1
+        };
+        
+        // MULTIPLE INITIALIZATION ATTEMPTS - Ensure Universe starts
+        
+        // Method 1: Immediate initialization attempt
+        console.log('🚀 IMMEDIATE: Attempting immediate Universe initialization');
+        if (typeof Universe !== 'undefined') {
+            console.log('🚀 IMMEDIATE: Universe object found, calling init');
+            Universe.init();
+        } else {
+            console.log('🚀 IMMEDIATE: Universe not ready yet, setting up listeners');
+        }
+        
+        // Method 2: DOMContentLoaded listener
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔧 DOM LOADED: Initialization script starting...');
+            console.log('🔧 DOM LOADED: Student data set:', window.STUDENT_DATA);
+            console.log('🔧 DOM LOADED: Universe object available:', typeof Universe !== 'undefined' ? Universe : 'undefined');
+            
+            if (typeof Universe !== 'undefined') {
+                console.log('🔧 DOM LOADED: About to call Universe.init()...');
+                Universe.init();
+                console.log('🔧 DOM LOADED: Universe.init() called successfully');
+            } else {
+                console.log('❌ DOM LOADED: Universe object not found');
+            }
+        });
+        
+        // Method 3: Delayed fallback
+        setTimeout(() => {
+            console.log('⏰ TIMEOUT: Fallback initialization attempt');
+            if (typeof Universe !== 'undefined' && !Universe.state.initialized) {
+                console.log('⏰ TIMEOUT: Universe found but not initialized, calling init');
+                Universe.init();
+            } else if (typeof Universe === 'undefined') {
+                console.log('⏰ TIMEOUT: Universe still not found, direct system init');
+                if (typeof MagicCanvas !== 'undefined') MagicCanvas.init();
+                if (typeof ParticleSystem !== 'undefined') ParticleSystem.init();
+                if (typeof AudioEngine !== 'undefined') AudioEngine.init();
+                if (typeof CreatureSystem !== 'undefined') CreatureSystem.init();
+                if (typeof LearningTree !== 'undefined') LearningTree.init();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
