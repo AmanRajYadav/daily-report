@@ -334,7 +334,7 @@ const CreatureSystem = {
     
     animateCreature(type, animation) {
         const creature = this.activeCreatures.get(type);
-        if (!creature) return;
+        if (!creature || !creature.element) return;
         
         creature.state = animation;
         const svg = creature.element.querySelector('svg');
@@ -369,12 +369,14 @@ const CreatureSystem = {
                     const rightPupil = svg.querySelector('.pupil-right');
                     
                     [leftPupil, rightPupil].forEach(pupil => {
-                        pupil.style.transition = 'transform 0.1s';
-                        pupil.style.transform = 'scaleY(0)';
-                        
-                        setTimeout(() => {
-                            pupil.style.transform = 'scaleY(1)';
-                        }, 100);
+                        if (pupil) {
+                            pupil.style.transition = 'transform 0.1s';
+                            pupil.style.transform = 'scaleY(0)';
+                            
+                            setTimeout(() => {
+                                pupil.style.transform = 'scaleY(1)';
+                            }, 100);
+                        }
                     });
                     
                     // Show constellation eyes
