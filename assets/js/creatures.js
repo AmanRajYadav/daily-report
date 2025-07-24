@@ -1,4 +1,7 @@
 // creatures.js - Bringing life to the learning universe
+console.log('🧪 CREATURES.JS DEBUG: File loaded, testing creature sprite paths');
+console.log('🧪 TEST: ../assets/sprites/creatures/science-owl.svg');
+
 const CreatureSystem = {
     creatures: {
         'math-dragon': {
@@ -144,6 +147,7 @@ const CreatureSystem = {
         creature.dataset.creature = type; // Add this for lazy loader
         
         // Try to load external SVG first, fallback to generated
+        console.log(`🔎 About to call loadCreatureSprite for: ${type}`);
         this.loadCreatureSprite(type, creature, creatureData);
         
         container.appendChild(creature);
@@ -161,20 +165,26 @@ const CreatureSystem = {
     },
 
     async loadCreatureSprite(type, creature, creatureData) {
-        const spriteUrl = `/assets/sprites/creatures/${type}.svg`;
+        console.log(`🚀 FUNCTION START: loadCreatureSprite called for ${type}`);
+        const spriteUrl = `../assets/sprites/creatures/${type}.svg`;
+        
+        console.log(`🔍 Attempting to load creature sprite: ${type} from ${spriteUrl}`);
         
         try {
             const response = await fetch(spriteUrl);
+            console.log(`📡 Response status for ${type}: ${response.status}`);
+            
             if (response.ok) {
                 const svgText = await response.text();
                 creature.innerHTML = svgText;
                 creature.classList.add('sprite-loaded');
-                console.log(`🦊 Loaded creature sprite: ${type}`);
+                console.log(`✅ Successfully loaded creature sprite: ${type}`);
             } else {
-                throw new Error(`Sprite not found: ${spriteUrl}`);
+                throw new Error(`Sprite not found: ${spriteUrl} (Status: ${response.status})`);
             }
         } catch (error) {
-            console.log(`Using procedural generation for: ${type}`);
+            console.log(`❌ Failed to load sprite for ${type}: ${error.message}`);
+            console.log(`🎨 Using procedural generation for: ${type}`);
             // Fallback to generated SVG
             const svg = this.generateCreatureSVG(creatureData);
             creature.appendChild(svg);

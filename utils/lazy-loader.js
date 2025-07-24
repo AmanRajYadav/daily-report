@@ -165,7 +165,7 @@ class LazyAssetLoader {
   }
 
   async loadCreatureSprite(creatureName) {
-    const spriteUrl = `/assets/sprites/creatures/${creatureName}.svg`;
+    const spriteUrl = `../assets/sprites/creatures/${creatureName}.svg`;
     
     try {
       const response = await fetch(spriteUrl);
