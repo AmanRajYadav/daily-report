@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="minimal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>kavya · Learning Universe</title>
+    <meta name="description" content="A magical learning journey">
+    
+    <!-- UPDATED: Changed preload to sparkle.mp3 instead of morning-forest.mp3 -->
+    <link rel="preload" href="../assets/sounds/effects/sparkle.mp3" as="audio">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/themes/minimal.css" id="theme-stylesheet">
+    
+    <style>
+        /* Enhanced minimal theme with proper card styling */
+        :root {
+            --student-hue: 25.19999999999999;
+            --student-accent: hsl(var(--student-hue), 70%, 60%);
+            --student-accent-soft: hsl(var(--student-hue), 60%, 95%);
+            --student-accent-dark: hsl(var(--student-hue), 70%, 45%);
+            --paper-white: #ffffff;
+            --paper-cream: #fafafa;
+            --ink-dark: #1a1a1a;
+            --ink-medium: #4a4a4a;
+            --ink-light: #6b6b6b;
+            --accent-gold: #f59e0b;
+            --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --border-light: 1px solid rgba(0, 0, 0, 0.08);
+            --radius-small: 12px;
+            --radius-medium: 16px;
+        }
+        
+        /* Hero section styling */
+        .student-name {
+            color: var(--accent-gold) !important;
+            text-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+        }
+        
+        .hero-greeting {
+            color: white !important;
+        }
+        
+        /* Enhanced non-transparent card styling */
+        .content-card {
+            background: var(--paper-white) !important;
+            border-radius: var(--radius-medium);
+            padding: 48px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-soft);
+            opacity: 1 !important;
+            backdrop-filter: none !important;
+            border: var(--border-light);
+            position: relative;
+        }
+        
+        .content-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--student-accent) 0%, var(--student-accent-soft) 100%);
+        }
+        
+        /* Section titles with proper emoji styling */
+        .section-title {
+            font-family: "EB Garamond", serif;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--ink-dark);
+        }
+        
+        .section-title::before {
+            font-size: 1.5rem;
+        }
+        
+        /* Content styling */
+        .card-content {
+            color: var(--ink-medium);
+            line-height: 1.8;
+        }
+        
+        /* Subject badges */
+        .subject-badge, .magical-badge {
+            background: var(--student-accent-soft);
+            color: var(--student-accent);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+        
+        /* Parent report grid */
+        .parent-report-grid {
+            display: grid;
+            gap: 16px;
+        }
+        
+        .report-item {
+            background: var(--paper-cream);
+            padding: 16px;
+            border-radius: var(--radius-small);
+            border: var(--border-light);
+        }
+        
+        .report-label {
+            color: var(--student-accent);
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="magic-circle">
+                <svg viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="80" class="circle-outer" />
+                    <circle cx="100" cy="100" r="60" class="circle-middle" />
+                    <circle cx="100" cy="100" r="40" class="circle-inner" />
+                </svg>
+            </div>
+            <p class="loading-text">Preparing your magical journey...</p>
+        </div>
+    </div>
+
+    <!-- REMOVED: Theme toggle button - no longer needed -->
+
+    <!-- Living Background -->
+    <div class="universe-container">
+        <canvas id="magicCanvas"></canvas>
+        
+        <div class="parallax-layer" data-depth="0.1">
+            <div class="clouds"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.3">
+            <div class="floating-elements"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.5">
+            <div class="fireflies"></div>
+        </div>
+        
+        <!-- REMOVED: Seasonal overlay - no longer needed -->
+    </div>
+
+    <!-- Learning Tree -->
+    <div class="learning-tree-container">
+        <div class="tree-stage" id="learningTree"></div>
+        <div class="tree-info">
+            <span class="visits-count">Visit #<span id="visitNumber">1</span></span>
+            <span class="tree-stage-name" id="treeStageName">Seedling</span>
+        </div>
+    </div>
+
+    <!-- NEW: Top GIF Animals Container -->
+    <div class="top-animals-container" id="topAnimalsContainer">
+        <!-- GIF animals will be added by creatures.js -->
+    </div>
+
+    <!-- Walking Animals Container -->
+    <div class="animals-container" id="animalsContainer">
+        <!-- Animated sprites will be added by creatures.js -->
+    </div>
+
+    <!-- REMOVED: Audio controls - no longer needed -->
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-particles" id="heroParticles"></div>
+            
+            <div class="date-badge floating">24 July 2025</div>
+            
+            <!-- UPDATED: Name now has click animation -->
+            <h1 class="student-name magical-text">
+                kavya
+                <span class="name-sparkles"></span>
+            </h1>
+            
+            <p class="hero-greeting">Welcome back to your learning universe</p>
+            
+            <!-- Student Avatar -->
+            <div class="student-avatar-container">
+                <div class="avatar-aura"></div>
+                <div class="student-avatar" id="studentAvatar">
+                    <div class="avatar-inner" data-initial="K"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Reflection -->
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="star">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M24 4l5.5 11.1L42 17l-9 8.8L35.1 38 24 32.2 12.9 38 15 25.8 6 17l12.5-1.9z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">💭 Today's Reflection</h2>
+            </header>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="reflection-text">
+                    🌟 Amazing work today, Kavya! You built one of the best definitions of an angle I have ever seen, making Sammy the mascot incredibly happy. Your ability to take an idea and make it more clear and detailed is a true superpower! 🚀
+                </p>
+            </div>
+            
+            <div class="tap-hint">Tap to hear • Long press for Hindi</div>
+        </section>
+
+        <!-- Learning Content -->
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="social-science-dog">
+            <div class="card-background-effect"></div>
+            
+            <!-- Subject Creature -->
+            <div class="subject-creature-container">
+                <div class="creature-home" id="creatureHome">
+                    <!-- Animated creature will be loaded here -->
+                </div>
+            </div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M4 6h8c2.2 0 4 1.8 4 4v28c0-1.7-1.3-3-3-3H4V6zm40 0h-8c-2.2 0-4 1.8-4 4v28c0-1.7 1.3-3 3-3h9V6z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">📚 What We Explored</h2>
+            </header>
+            
+            <div class="subject-badge magical-badge">Geometry: Uncovering the Secrets of Shapes!</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="learning-content">
+                    Today's adventure: discovering the secret building blocks of everything we see! We learned that even the most complex shapes start with a simple 'point'. We discovered that a 'line segment' is like a path between two places, and a 'ray' is like the beam from a flashlight, starting somewhere and going on forever. The coolest part was when we used a laptop to see how opening it creates 'angles' of different sizes. This is the first step to understanding how bridges are built, how artists create perspective, and how to give directions on a map.
+                </p>
+            </div>
+        </section>
+
+        <!-- Dynamic Activity Section -->
+                <section class="content-card floating-card activity-card" data-sound="chime" data-creature="rocket">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <circle cx="24" cy="24" r="20" class="clock-circle"/>
+                        <path class="clock-hand" d="M24 12v12l8 4"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">🎯 Your Mission</h2>
+            </header>
+            
+            <div class="mission-name">🎯 Angle Hunter Adventure!</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <div class="mission-description">
+                    <p>Your mission: become a geometry detective in your own home! Step 1: Find and point to three 'right angles' (the perfect corners of a book, a box, or where the wall meets the floor). Step 2: Use two pencils to show your family what an 'acute angle' (a small, sharp angle) looks like. Step 3: Now use the pencils to show them an 'obtuse angle' (a wide, open angle). Bonus challenge: Can you find an object that opens up to form an obtuse angle?</p>
+                </div>
+                
+                <div class="mission-motivation">
+                    <span class="sparkle-text">✨ Why it's amazing:</span>
+                    <p>This activity is amazing because it trains your brain to see the math that exists all around you, turning everyday objects into a fun puzzle. You'll strengthen your understanding of angles without even trying, and you'll develop fantastic observation skills! Plus, you get to be the teacher and show your family what these cool shapes are called.</p>
+                </div>
+            </div>
+            
+            <div class="hidden-treasure" id="hiddenTreasure">
+                <span class="treasure-emoji">🎁</span>
+                <p class="treasure-message">Secret discovered! You're amazing!</p>
+            </div>
+        </section>
+
+        <!-- Dynamic Parent Section -->
+                <section class="content-card floating-card parent-card" data-sound="notification">
+            <div class="card-background-effect"></div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M31 28v-4c0-3.3-2.7-6-6-6h-10c-3.3 0-6 2.7-6 6v4"/>
+                        <circle cx="20" cy="10" r="6"/>
+                        <path d="M39 28v-4c0-2.8-1.9-5.1-4.5-5.8"/>
+                        <path d="M33 4.2c2.6.7 4.5 3 4.5 5.8s-1.9 5.1-4.5 5.8"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">👨‍👩‍👧‍👦 Family Update</h2>
+            </header>
+            
+            <div class="parent-report-grid">
+                <div class="report-item">
+                    <h3 class="report-label">Today's Focus</h3>
+                    <p>Development of precise mathematical language and conceptual understanding through interactive dialogue and creative application.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Progress Made</h3>
+                    <p>Key concepts: Point (the basic starting block), Line/Line Segment/Ray (understanding endpoints and infinity), and Angles (formed by two rays from a common vertex). We used the tangible example of a laptop opening to demonstrate how angles change and are present in everyday technology.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Home Practice</h3>
+                    <p>The 'Angle Hunter Adventure': Kavya has been asked to find examples of right, acute, and obtuse angles around the house using everyday objects. This reinforces the day's concepts in a practical, hands-on way. Expected time: 10-15 minutes.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Special Notes</h3>
+                    <p>💡 Breakthrough moment: Kavya's construction of a comprehensive definition for an angle, which included the vertex, the arms, and a real-world example. She truly owned the concept. Growth area: We are focusing on making our answers reflect Efficiency, Beauty, and Clarity (EBC). This encourages her not just to be correct, but to communicate her knowledge effectively. Ask your child about 'Sammy' the mascot and how she made her so happy today! To support at home: When you see a 'V' shape anywhere (a slice of pizza, birds flying), ask 'What kind of angle is that?'</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Arcade Portal -->
+        <section class="arcade-portal-section">
+            <div class="portal-container">
+                <div class="portal-rings">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                </div>
+                
+                <a href="https://amanrajyadav.github.io/fluence-quiz/" class="arcade-button magical-button">
+                    <span class="button-bg"></span>
+                    <span class="button-text">Enter Learning Arcade</span>
+                    <span class="button-icon">🎮</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Shake Message Overlay -->
+    <div class="shake-overlay" id="shakeOverlay">
+        <div class="stardust-container" id="stardustContainer"></div>
+        <div class="shake-message">
+            <h3>✨ Magic Unlocked! ✨</h3>
+            <p>You found a hidden surprise!</p>
+        </div>
+    </div>
+
+    <!-- Scripts - UPDATED: Added features.js -->
+    <script src="../assets/js/universe.js"></script>
+    <script src="../assets/js/creatures.js"></script>
+    <script src="../assets/js/audio.js"></script>
+    <script src="../assets/js/particles.js"></script>
+    <script src="../assets/js/tree.js"></script>
+    <script src="../assets/js/features.js"></script>
+    <script src="../assets/js/magic.js"></script>
+    
+    <script>
+        // Initialize with student data
+        window.STUDENT_DATA = {
+            name: 'kavya',
+            id: 'student2',
+            hue: 25.19999999999999,
+            subject: 'Geometry: Uncovering the Secrets of Shapes!',
+            visitCount: parseInt(localStorage.getItem('visits_student2') || '0') + 1
+        };
+        
+        // EMERGENCY LOADING SCREEN FIX - Hide after 3 seconds no matter what
+        setTimeout(() => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+                console.log('🚨 EMERGENCY: Force hiding loading screen after 3 seconds');
+                loadingScreen.style.display = 'none';
+            }
+        }, 3000);
+        
+        // Start the magic - IMMEDIATE INITIALIZATION
+        Universe.init();
+    </script>
+</body>
+</html>
