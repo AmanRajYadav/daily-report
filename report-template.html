@@ -7,7 +7,7 @@
     <meta name="description" content="A magical learning journey">
     
     <!-- Preload critical assets -->
-    <link rel="preload" href="../assets/sounds/ambient/morning-forest.mp3" as="audio">
+    <link rel="preload" href="../assets/sounds/effects/sparkle.mp3" as="audio">
     <link rel="preload" href="../assets/sprites/creatures/math-dragon.svg" as="image">
     
     <!-- Fonts -->
@@ -41,11 +41,6 @@
         </div>
     </div>
 
-    <!-- Theme Toggle -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <span class="theme-icon-minimal">✨</span>
-        <span class="theme-icon-cosmic">🌙</span>
-    </button>
 
     <!-- Living Background -->
     <div class="universe-container">
@@ -67,6 +62,11 @@
         <div class="seasonal-overlay" id="seasonalOverlay"></div>
     </div>
 
+    <!-- Background Toggle Button -->
+    <button class="background-toggle" id="backgroundToggle" title="Toggle background theme">
+        🌙
+    </button>
+
     <!-- Learning Tree (Fixed Position) -->
     <div class="learning-tree-container">
         <div class="tree-stage" id="learningTree">
@@ -78,22 +78,16 @@
         </div>
     </div>
 
+    <!-- Top GIF Animals Container -->
+    <div class="top-animals-container" id="topAnimalsContainer">
+        <!-- GIF animals will be added by creatures.js -->
+    </div>
+
     <!-- Walking Animals Container -->
     <div class="animals-container" id="animalsContainer">
         <!-- Animated sprites will be added by creatures.js -->
     </div>
 
-    <!-- Audio Controls -->
-    <div class="audio-controls">
-        <button class="audio-ambient active" id="ambientToggle" aria-label="Toggle ambient sounds">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
-            </svg>
-        </button>
-        <div class="volume-slider">
-            <input type="range" id="volumeControl" min="0" max="100" value="50">
-        </div>
-    </div>
 
     <!-- Main Content -->
     <main class="content-wrapper">
@@ -284,6 +278,7 @@
     <script src="../assets/js/audio.js"></script>
     <script src="../assets/js/particles.js"></script>
     <script src="../assets/js/tree.js"></script>
+    <script src="../assets/js/features.js"></script>
     <script src="../assets/js/magic.js"></script>
     
     <script>
@@ -296,9 +291,37 @@
             visitCount: parseInt(localStorage.getItem('visits_{{STUDENT_ID}}') || '0') + 1
         };
         
+        // Background toggle functionality
+        function initBackgroundToggle() {
+            const toggleBtn = document.getElementById('backgroundToggle');
+            const body = document.body;
+            
+            // Check for saved preference
+            const savedTheme = localStorage.getItem('backgroundTheme');
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                toggleBtn.classList.add('light-mode');
+                toggleBtn.textContent = '☀️';
+            }
+            
+            toggleBtn.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                toggleBtn.classList.toggle('light-mode');
+                
+                if (body.classList.contains('light-mode')) {
+                    toggleBtn.textContent = '☀️';
+                    localStorage.setItem('backgroundTheme', 'light');
+                } else {
+                    toggleBtn.textContent = '🌙';
+                    localStorage.setItem('backgroundTheme', 'dark');
+                }
+            });
+        }
+        
         // Start the magic
         document.addEventListener('DOMContentLoaded', () => {
             Universe.init();
+            initBackgroundToggle();
         });
     </script>
 </body>

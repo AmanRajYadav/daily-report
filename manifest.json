@@ -1,0 +1,149 @@
+{
+  "_comment": "📁 Enhanced manifest.json (Replace your existing one)",
+  "name": "Fluence Learning Universe",
+  "short_name": "Fluence",
+  "description": "Interactive learning platform with AI-powered quizzes and personalized education experiences",
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "theme_color": "#667eea",
+  "background_color": "#1e1b4b",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en-US",
+  "dir": "ltr",
+  
+  "categories": [
+    "education",
+    "games", 
+    "productivity",
+    "lifestyle"
+  ],
+  
+  "icons": [
+    {
+      "src": "/fluence-icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/fluence-icon-192.png",
+      "type": "image/png", 
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/fluence-icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/fluence-icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512", 
+      "purpose": "maskable"
+    },
+    {
+      "src": "/fluence-favicon.ico",
+      "type": "image/x-icon",
+      "sizes": "16x16 24x24 32x32 48x48 64x64"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "/assets/screenshots/desktop-quiz.png",
+      "type": "image/png",
+      "sizes": "1920x1080",
+      "form_factor": "wide",
+      "label": "Interactive quiz interface on desktop"
+    },
+    {
+      "src": "/assets/screenshots/mobile-quiz.png", 
+      "type": "image/png",
+      "sizes": "390x844",
+      "form_factor": "narrow",
+      "label": "Mobile quiz experience"
+    }
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Take Quiz",
+      "short_name": "Quiz",
+      "description": "Start a new interactive quiz",
+      "url": "/quiz",
+      "icons": [
+        {
+          "src": "/assets/icons/quiz-shortcut.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "View Progress",
+      "short_name": "Progress", 
+      "description": "Check your learning progress",
+      "url": "/progress",
+      "icons": [
+        {
+          "src": "/assets/icons/progress-shortcut.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Daily Report",
+      "short_name": "Report",
+      "description": "View today's learning summary",
+      "url": "/report",
+      "icons": [
+        {
+          "src": "/assets/icons/report-shortcut.png", 
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://amanrajyadav.github.io/fluence-quiz/"
+    }
+  ],
+  
+  "prefer_related_applications": false,
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+fluence",
+      "url": "/?quiz=%s"
+    }
+  ],
+  
+  "file_handlers": [
+    {
+      "action": "/quiz-import",
+      "accept": {
+        "application/json": [".json"],
+        "text/plain": [".txt"]
+      }
+    }
+  ],
+  
+  "handle_links": "preferred",
+  
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
+} 

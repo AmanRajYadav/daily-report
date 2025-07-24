@@ -171,6 +171,9 @@ const ParticleSystem = {
         const cloudsContainer = document.querySelector('.clouds');
         if (!cloudsContainer) return;
         
+        // Detect if it's desktop (screen width > 768px)
+        const isDesktop = window.innerWidth > 768;
+        
         for (let i = 0; i < 5; i++) {
             const cloud = {
                 element: document.createElement('div'),
@@ -181,12 +184,16 @@ const ParticleSystem = {
                 opacity: Math.random() * 0.3 + 0.1
             };
             
+            // Set cloud size based on device type
+            const cloudWidth = isDesktop ? 600 : 200;  // 3x larger on desktop
+            const cloudHeight = isDesktop ? 300 : 100;  // 3x larger on desktop
+            
             cloud.element.className = 'cloud';
             cloud.element.innerHTML = this.generateCloudSVG();
             cloud.element.style.cssText = `
                 position: absolute;
-                width: 200px;
-                height: 100px;
+                width: ${cloudWidth}px;
+                height: ${cloudHeight}px;
                 opacity: ${cloud.opacity};
                 transform: translate(${cloud.x}px, ${cloud.y}px) scale(${cloud.scale});
                 will-change: transform;
@@ -198,6 +205,10 @@ const ParticleSystem = {
     },
     
     generateCloudSVG() {
+        // Check current theme to determine cloud color
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'minimal';
+        const cloudColor = currentTheme === 'minimal' ? '#f8fdff' : 'rgba(255, 255, 255, 0.4)';
+        
         return `
             <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -206,9 +217,9 @@ const ParticleSystem = {
                     </filter>
                 </defs>
                 <g filter="url(#cloudBlur)">
-                    <ellipse cx="60" cy="60" rx="40" ry="25" fill="rgba(255, 255, 255, 0.4)"/>
-                    <ellipse cx="90" cy="50" rx="50" ry="30" fill="rgba(255, 255, 255, 0.4)"/>
-                    <ellipse cx="130" cy="60" rx="35" ry="20" fill="rgba(255, 255, 255, 0.4)"/>
+                    <ellipse cx="60" cy="60" rx="40" ry="25" fill="${cloudColor}"/>
+                    <ellipse cx="90" cy="50" rx="50" ry="30" fill="${cloudColor}"/>
+                    <ellipse cx="130" cy="60" rx="35" ry="20" fill="${cloudColor}"/>
                 </g>
             </svg>
         `;
@@ -271,9 +282,13 @@ const ParticleSystem = {
         this.clouds.forEach(cloud => {
             cloud.x += cloud.speed;
             
-            // Wrap around
-            if (cloud.x > window.innerWidth + 200) {
-                cloud.x = -400;
+            // Get cloud dimensions for proper wrapping
+            const cloudWidth = cloud.element.offsetWidth || 200;
+            const cloudHeight = cloud.element.offsetHeight || 100;
+            
+            // Wrap around with proper cloud size consideration
+            if (cloud.x > window.innerWidth + cloudWidth) {
+                cloud.x = -cloudWidth;
                 cloud.y = Math.random() * 300;
             }
             
@@ -395,6 +410,20 @@ const ParticleSystem = {
             this.starsContainer.remove();
             this.stars = [];
         }
+    },
+    
+    updateCloudColors() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'minimal';
+        const cloudColor = currentTheme === 'minimal' ? '#f8fdff' : 'rgba(255, 255, 255, 0.4)';
+        
+        this.clouds.forEach(cloud => {
+            if (cloud.element) {
+                const ellipses = cloud.element.querySelectorAll('ellipse');
+                ellipses.forEach(ellipse => {
+                    ellipse.setAttribute('fill', cloudColor);
+                });
+            }
+        });
     },
     
     initInteractions() {

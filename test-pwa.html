@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Test - Fluence Learning</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Fluence">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- PWA Icons -->
+    <link rel="apple-touch-icon" href="/fluence-icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/fluence-icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/fluence-icon-512.png">
+
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="/assets/sprites/creatures/general-fox.svg" as="image" type="image/svg+xml">
+    <link rel="preload" href="/assets/sounds/effects/click.mp3" as="fetch" type="audio/mpeg">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .test-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background: rgba(34, 197, 94, 0.3);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.3);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+        
+        .status.info {
+            background: rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+        
+        .log {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .install-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .install-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 PWA Test - Fluence Learning</h1>
+            <p>Testing Progressive Web App features</p>
+        </div>
+        
+        <!-- Service Worker Status -->
+        <div class="test-section">
+            <h2>🔧 Service Worker Status</h2>
+            <div id="sw-status" class="status info">Checking service worker...</div>
+            <button class="test-button" onclick="checkServiceWorker()">Check SW Status</button>
+            <button class="test-button" onclick="unregisterServiceWorker()">Unregister SW</button>
+            <div id="sw-log" class="log"></div>
+        </div>
+        
+        <!-- PWA Installation -->
+        <div class="test-section">
+            <h2>📱 PWA Installation</h2>
+            <div id="install-status" class="status info">Checking installation status...</div>
+            <button class="test-button" onclick="checkInstallation()">Check Installation</button>
+            <button class="test-button" onclick="triggerInstall()">Trigger Install</button>
+        </div>
+        
+        <!-- Cache Testing -->
+        <div class="test-section">
+            <h2>💾 Cache Testing</h2>
+            <div id="cache-status" class="status info">Checking cache...</div>
+            <button class="test-button" onclick="checkCache()">Check Cache</button>
+            <button class="test-button" onclick="clearCache()">Clear Cache</button>
+            <div id="cache-log" class="log"></div>
+        </div>
+        
+        <!-- Performance Testing -->
+        <div class="test-section">
+            <h2>⚡ Performance Testing</h2>
+            <div id="perf-status" class="status info">Checking performance...</div>
+            <button class="test-button" onclick="checkPerformance()">Check Performance</button>
+            <button class="test-button" onclick="testLazyLoading()">Test Lazy Loading</button>
+            <div id="perf-log" class="log"></div>
+        </div>
+        
+        <!-- Offline Testing -->
+        <div class="test-section">
+            <h2>📵 Offline Testing</h2>
+            <div id="offline-status" class="status info">Checking offline status...</div>
+            <button class="test-button" onclick="checkOffline()">Check Offline</button>
+            <button class="test-button" onclick="simulateOffline()">Simulate Offline</button>
+            <div id="offline-log" class="log"></div>
+        </div>
+        
+        <!-- Asset Testing -->
+        <div class="test-section">
+            <h2>🎨 Asset Testing</h2>
+            <div id="asset-status" class="status info">Checking assets...</div>
+            <button class="test-button" onclick="testAssets()">Test Assets</button>
+            <button class="test-button" onclick="testCreatures()">Test Creatures</button>
+            <div id="asset-log" class="log"></div>
+        </div>
+    </div>
+    
+    <!-- Install container for PWA -->
+    <div class="install-container">
+        <button id="install-button" class="install-button hidden">📱 Install Fluence App</button>
+    </div>
+    
+    <!-- Utility Scripts -->
+    <script src="/utils/lazy-loader.js"></script>
+    <script src="/utils/pwa-installer.js"></script>
+    <script src="/utils/performance-monitor.js"></script>
+    <script src="/utils/offline-manager.js"></script>
+    <script src="/utils/app-initializer.js"></script>
+    
+    <!-- Test Scripts -->
+    <script>
+        // Test functions
+        function log(elementId, message) {
+            const logElement = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.innerHTML += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        function updateStatus(elementId, message, type = 'info') {
+            const statusElement = document.getElementById(elementId);
+            statusElement.textContent = message;
+            statusElement.className = `status ${type}`;
+        }
+        
+        // Service Worker Tests
+        async function checkServiceWorker() {
+            log('sw-log', 'Checking service worker status...');
+            
+            if ('serviceWorker' in navigator) {
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (registration) {
+                    updateStatus('sw-status', '✅ Service Worker is registered', 'success');
+                    log('sw-log', `SW registered with scope: ${registration.scope}`);
+                    log('sw-log', `SW state: ${registration.active ? 'active' : 'installing'}`);
+                } else {
+                    updateStatus('sw-status', '❌ Service Worker not registered', 'error');
+                    log('sw-log', 'No service worker registration found');
+                }
+            } else {
+                updateStatus('sw-status', '❌ Service Worker not supported', 'error');
+                log('sw-log', 'Service Worker API not available');
+            }
+        }
+        
+        async function unregisterServiceWorker() {
+            log('sw-log', 'Unregistering service worker...');
+            const registration = await navigator.serviceWorker.getRegistration();
+            if (registration) {
+                await registration.unregister();
+                updateStatus('sw-status', '✅ Service Worker unregistered', 'success');
+                log('sw-log', 'Service worker unregistered successfully');
+            }
+        }
+        
+        // PWA Installation Tests
+        function checkInstallation() {
+            log('sw-log', 'Checking PWA installation status...');
+            
+            const isInstalled = window.navigator.standalone || 
+                              window.matchMedia('(display-mode: standalone)').matches;
+            
+            if (isInstalled) {
+                updateStatus('install-status', '✅ PWA is installed', 'success');
+                log('sw-log', 'PWA is running in standalone mode');
+            } else {
+                updateStatus('install-status', 'ℹ️ PWA not installed', 'info');
+                log('sw-log', 'PWA is running in browser mode');
+            }
+        }
+        
+        function triggerInstall() {
+            log('sw-log', 'Triggering install prompt...');
+            const installButton = document.getElementById('install-button');
+            if (installButton && !installButton.classList.contains('hidden')) {
+                installButton.click();
+                log('sw-log', 'Install button clicked');
+            } else {
+                log('sw-log', 'Install button not available');
+            }
+        }
+        
+        // Cache Tests
+        async function checkCache() {
+            log('cache-log', 'Checking cache status...');
+            
+            try {
+                const cacheNames = await caches.keys();
+                log('cache-log', `Found ${cacheNames.length} caches: ${cacheNames.join(', ')}`);
+                
+                for (const cacheName of cacheNames) {
+                    const cache = await caches.open(cacheName);
+                    const requests = await cache.keys();
+                    log('cache-log', `Cache "${cacheName}": ${requests.length} items`);
+                }
+                
+                updateStatus('cache-status', `✅ Found ${cacheNames.length} caches`, 'success');
+            } catch (error) {
+                updateStatus('cache-status', '❌ Error checking cache', 'error');
+                log('cache-log', `Error: ${error.message}`);
+            }
+        }
+        
+        async function clearCache() {
+            log('cache-log', 'Clearing all caches...');
+            
+            try {
+                const cacheNames = await caches.keys();
+                await Promise.all(cacheNames.map(name => caches.delete(name)));
+                updateStatus('cache-status', '✅ All caches cleared', 'success');
+                log('cache-log', `Cleared ${cacheNames.length} caches`);
+            } catch (error) {
+                updateStatus('cache-status', '❌ Error clearing cache', 'error');
+                log('cache-log', `Error: ${error.message}`);
+            }
+        }
+        
+        // Performance Tests
+        function checkPerformance() {
+            log('perf-log', 'Checking performance metrics...');
+            
+            if ('performance' in window) {
+                const perfData = performance.timing;
+                const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+                const domReady = perfData.domContentLoadedEventEnd - perfData.navigationStart;
+                
+                log('perf-log', `Page load time: ${pageLoadTime}ms`);
+                log('perf-log', `DOM ready: ${domReady}ms`);
+                
+                updateStatus('perf-status', `✅ Page loaded in ${pageLoadTime}ms`, 'success');
+            } else {
+                updateStatus('perf-status', '❌ Performance API not available', 'error');
+            }
+        }
+        
+        function testLazyLoading() {
+            log('perf-log', 'Testing lazy loading...');
+            
+            if (window.fluenceApp && window.fluenceApp.lazyLoader) {
+                log('perf-log', '✅ Lazy loader is initialized');
+                log('perf-log', `Loaded assets: ${window.fluenceApp.lazyLoader.loadedAssets.size}`);
+            } else {
+                log('perf-log', '❌ Lazy loader not available');
+            }
+        }
+        
+        // Offline Tests
+        function checkOffline() {
+            log('offline-log', 'Checking offline status...');
+            
+            const isOnline = navigator.onLine;
+            if (isOnline) {
+                updateStatus('offline-status', '✅ Online', 'success');
+                log('offline-log', 'Device is online');
+            } else {
+                updateStatus('offline-status', '📵 Offline', 'error');
+                log('offline-log', 'Device is offline');
+            }
+        }
+        
+        function simulateOffline() {
+            log('offline-log', 'Simulating offline mode...');
+            
+            // This is just for testing - in real scenarios, you'd use DevTools
+            log('offline-log', 'Use Chrome DevTools > Network > Offline to test offline functionality');
+            log('offline-log', 'Or disconnect your internet connection');
+        }
+        
+        // Asset Tests
+        async function testAssets() {
+            log('asset-log', 'Testing asset loading...');
+            
+            const assets = [
+                '/assets/sprites/creatures/math-dragon.svg',
+                '/assets/sprites/creatures/science-owl.svg',
+                '/assets/sprites/creatures/general-fox.svg'
+            ];
+            
+            for (const asset of assets) {
+                try {
+                    const response = await fetch(asset);
+                    if (response.ok) {
+                        log('asset-log', `✅ ${asset} - OK`);
+                    } else {
+                        log('asset-log', `❌ ${asset} - ${response.status}`);
+                    }
+                } catch (error) {
+                    log('asset-log', `❌ ${asset} - Error: ${error.message}`);
+                }
+            }
+            
+            updateStatus('asset-status', '✅ Asset test completed', 'success');
+        }
+        
+        function testCreatures() {
+            log('asset-log', 'Testing creature sprites...');
+            
+            if (window.fluenceApp && window.fluenceApp.lazyLoader) {
+                window.fluenceApp.lazyLoader.loadCreatureSprite('math-dragon');
+                window.fluenceApp.lazyLoader.loadCreatureSprite('science-owl');
+                log('asset-log', '✅ Creature sprites loaded');
+            } else {
+                log('asset-log', '❌ Lazy loader not available');
+            }
+        }
+        
+        // Initialize tests when page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkServiceWorker();
+                checkInstallation();
+                checkCache();
+                checkPerformance();
+                checkOffline();
+                testAssets();
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

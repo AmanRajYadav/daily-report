@@ -1,4 +1,6 @@
 // universe.js - The heart of the magical learning experience
+console.log('🌌 universe.js loading...');
+
 const Universe = {
     config: {
         particleCount: 100,
@@ -11,9 +13,6 @@ const Universe = {
     
     state: {
         initialized: false,
-        currentSeason: null,
-        timeOfDay: null,
-        weatherCondition: null,
         shakeDetected: false,
         orientation: { alpha: 0, beta: 0, gamma: 0 }
     },
@@ -21,24 +20,74 @@ const Universe = {
     init() {
         if (this.state.initialized) return;
         
+        console.log('🌌 Universe.init() called - VERSION 2.0 UPDATED');
+        console.log('🌌 Starting initialization sequence...');
+        console.log('🌌 About to start Promise.all for system initialization...');
+        console.log('🌌 Starting initialization sequence...');
+        
         // Show loading animation
         this.showLoadingScreen();
+        
+        // CRITICAL FIX: Force hide loading screen after 1 second regardless
+        setTimeout(() => {
+            console.log('🚨 EMERGENCY: Force hiding loading screen');
+            this.hideLoadingScreen();
+            this.playWelcomeSequence();
+            this.state.initialized = true;
+        }, 1000);
+        
+        console.log('🌌 About to start Promise.all for system initialization...');
         
         // Initialize all systems
         Promise.all([
             this.loadAssets(),
             this.initThemeSystem(),
-            this.initTimeAndSeason(),
             this.initDeviceMotion(),
             this.initParallax(),
             this.initInteractions()
         ]).then(() => {
-            // Start all engines
-            MagicCanvas.init();
-            ParticleSystem.init();
-            AudioEngine.init();
-            CreatureSystem.init();
-            LearningTree.init();
+            console.log('🌌 All systems initialized, starting engines...');
+            
+            // Initialize theme system
+            console.log('🎨 Starting theme system initialization...');
+            this.initThemeSystem();
+            console.log('🎨 Theme system initialization complete');
+            
+            // Initialize device motion
+            console.log('📱 Starting device motion initialization...');
+            this.initDeviceMotion();
+            console.log('📱 Device motion initialization complete');
+            
+            // Initialize parallax
+            console.log('🌊 Starting parallax initialization...');
+            this.initParallax();
+            console.log('🌊 Parallax initialization complete');
+            
+            // Initialize interactions
+            console.log('👆 Starting interactions initialization...');
+            this.initInteractions();
+            console.log('👆 Interactions initialization complete');
+            
+            // Start all engines (with error handling)
+            try {
+                if (typeof MagicCanvas !== 'undefined') MagicCanvas.init();
+            } catch (e) { console.log('MagicCanvas init failed:', e); }
+            
+            try {
+                if (typeof ParticleSystem !== 'undefined') ParticleSystem.init();
+            } catch (e) { console.log('ParticleSystem init failed:', e); }
+            
+            try {
+                if (typeof AudioEngine !== 'undefined') AudioEngine.init();
+            } catch (e) { console.log('AudioEngine init failed:', e); }
+            
+            try {
+                if (typeof CreatureSystem !== 'undefined') CreatureSystem.init();
+            } catch (e) { console.log('CreatureSystem init failed:', e); }
+            
+            try {
+                if (typeof LearningTree !== 'undefined') LearningTree.init();
+            } catch (e) { console.log('LearningTree init failed:', e); }
             
             // Hide loading screen with fade
             this.hideLoadingScreen();
@@ -47,11 +96,26 @@ const Universe = {
             this.playWelcomeSequence();
             
             this.state.initialized = true;
+            console.log('🌌 Universe initialization complete');
+        }).catch(error => {
+            console.error('🌌 Error during Universe initialization:', error);
+            // Even if there's an error, hide the loading screen
+            this.hideLoadingScreen();
+            this.playWelcomeSequence();
+            this.state.initialized = true;
         });
     },
 
     loadAssets() {
         return new Promise((resolve) => {
+            console.log('📦 Starting asset loading...');
+            
+            // SIMPLIFIED: Skip asset loading entirely to avoid hanging issues
+            console.log('📦 Skipping asset preloading to avoid loading screen hang');
+            console.log('📦 Asset loading complete');
+            resolve();
+            return;
+            
             const assets = [
                 // Sprites
                 { type: 'image', src: '../assets/sprites/animals/fox-walk.svg' },
@@ -59,26 +123,39 @@ const Universe = {
                 { type: 'image', src: '../assets/sprites/creatures/math-dragon.svg' },
                 { type: 'image', src: '../assets/sprites/creatures/science-owl.svg' },
                 
-                // Sounds
-                { type: 'audio', src: '../assets/sounds/ambient/morning-forest.mp3' },
-                { type: 'audio', src: '../assets/sounds/effects/sparkle.mp3' }
+                // Sounds - FIXED: Removed deleted morning-forest.mp3
+                { type: 'audio', src: '../assets/sounds/effects/sparkle.mp3' },
+                { type: 'audio', src: '../assets/sounds/effects/magic-sparkle.mp3' }
             ];
             
             let loaded = 0;
+            const totalAssets = assets.length;
+            
+            // Set a shorter timeout to avoid hanging
+            const timeout = setTimeout(() => {
+                console.log('⚠️ Asset loading timeout, proceeding anyway');
+                resolve();
+            }, 2000);
+            
+            const checkComplete = () => {
+                loaded++;
+                console.log(`📦 Loaded asset ${loaded}/${totalAssets}`);
+                if (loaded === totalAssets) {
+                    clearTimeout(timeout);
+                    resolve();
+                }
+            };
+            
             assets.forEach(asset => {
                 if (asset.type === 'image') {
                     const img = new Image();
-                    img.onload = () => {
-                        loaded++;
-                        if (loaded === assets.length) resolve();
-                    };
+                    img.onload = checkComplete;
+                    img.onerror = checkComplete;
                     img.src = asset.src;
                 } else if (asset.type === 'audio') {
                     const audio = new Audio();
-                    audio.oncanplaythrough = () => {
-                        loaded++;
-                        if (loaded === assets.length) resolve();
-                    };
+                    audio.oncanplaythrough = checkComplete;
+                    audio.onerror = checkComplete;
                     audio.src = asset.src;
                 }
             });
@@ -86,268 +163,39 @@ const Universe = {
     },
 
     initThemeSystem() {
-        const savedTheme = localStorage.getItem('theme') || 'minimal';
-        this.setTheme(savedTheme);
-        
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            const newTheme = this.config.theme === 'minimal' ? 'cosmic' : 'minimal';
-            this.setTheme(newTheme);
-        });
-    },
-
-    setTheme(theme) {
-        this.config.theme = theme;
-        document.documentElement.setAttribute('data-theme', theme);
-        
-        // Smooth transition between theme stylesheets
-        const themeLink = document.getElementById('theme-stylesheet');
-        const newThemeLink = document.createElement('link');
-        newThemeLink.rel = 'stylesheet';
-        newThemeLink.href = `../assets/css/themes/${theme}.css`;
-        newThemeLink.onload = () => {
-            themeLink.remove();
-            newThemeLink.id = 'theme-stylesheet';
-        };
-        document.head.appendChild(newThemeLink);
-        
-        localStorage.setItem('theme', theme);
-        
-        // Trigger theme change effects
-        if (theme === 'cosmic') {
-            ParticleSystem.addStars();
-            MagicCanvas.enableAurora();
-        } else {
-            ParticleSystem.removeStars();
-            MagicCanvas.disableAurora();
-        }
-    },
-
-    initTimeAndSeason() {
-        const now = new Date();
-        const hour = now.getHours();
-        const month = now.getMonth();
-        
-        // Determine time of day
-        if (hour >= 5 && hour < 12) {
-            this.state.timeOfDay = 'morning';
-        } else if (hour >= 12 && hour < 17) {
-            this.state.timeOfDay = 'afternoon';
-        } else if (hour >= 17 && hour < 20) {
-            this.state.timeOfDay = 'evening';
-        } else {
-            this.state.timeOfDay = 'night';
-        }
-        
-        // Determine season
-        if (month >= 2 && month <= 4) {
-            this.state.currentSeason = 'spring';
-        } else if (month >= 5 && month <= 7) {
-            this.state.currentSeason = 'summer';
-        } else if (month >= 8 && month <= 10) {
-            this.state.currentSeason = 'autumn';
-        } else {
-            this.state.currentSeason = 'winter';
-        }
-        
-        // Apply time and season classes
-        document.body.classList.add(`time-${this.state.timeOfDay}`);
-        document.body.classList.add(`season-${this.state.currentSeason}`);
-        
-        // Start seasonal effects
-        this.startSeasonalEffects();
-    },
-
-    startSeasonalEffects() {
-        const overlay = document.getElementById('seasonalOverlay');
-        
-        switch (this.state.currentSeason) {
-            case 'spring':
-                this.createPetals(overlay);
-                break;
-            case 'summer':
-                this.createButterflies(overlay);
-                break;
-            case 'autumn':
-                this.createFallingLeaves(overlay);
-                break;
-            case 'winter':
-                this.createSnowfall(overlay);
-                break;
-        }
-    },
-
-    createPetals(container) {
-        for (let i = 0; i < 15; i++) {
-            const petal = document.createElement('div');
-            petal.className = 'seasonal-element petal';
-            petal.style.left = Math.random() * 100 + '%';
-            petal.style.animationDelay = Math.random() * 10 + 's';
-            petal.style.animationDuration = (15 + Math.random() * 10) + 's';
-            
-            // Create SVG petal
-            petal.innerHTML = `
-                <svg viewBox="0 0 40 40" width="40" height="40">
-                    <path d="M20 35 Q15 25 20 15 Q25 25 20 35" 
-                          fill="rgba(255, 182, 193, 0.8)" 
-                          stroke="rgba(255, 105, 180, 0.5)"/>
-                </svg>
-            `;
-            
-            container.appendChild(petal);
-        }
-    },
-
-    createSnowfall(container) {
-        for (let i = 0; i < 30; i++) {
-            const snowflake = document.createElement('div');
-            snowflake.className = 'seasonal-element snowflake';
-            snowflake.style.left = Math.random() * 100 + '%';
-            snowflake.style.animationDelay = Math.random() * 10 + 's';
-            snowflake.style.animationDuration = (5 + Math.random() * 10) + 's';
-            snowflake.style.fontSize = (10 + Math.random() * 20) + 'px';
-            
-            // Create unique snowflake
-            snowflake.innerHTML = `
-                <svg viewBox="0 0 50 50" width="30" height="30">
-                    <g stroke="rgba(255, 255, 255, 0.8)" stroke-width="1" fill="none">
-                        <line x1="25" y1="5" x2="25" y2="45"/>
-                        <line x1="10" y1="25" x2="40" y2="25"/>
-                        <line x1="15" y1="15" x2="35" y2="35"/>
-                        <line x1="35" y1="15" x2="15" y2="35"/>
-                        <circle cx="25" cy="25" r="3" fill="white"/>
-                    </g>
-                </svg>
-            `;
-            
-            container.appendChild(snowflake);
-        }
-    },
-
-    createFallingLeaves(container) {
-        const leafColors = ['#D2691E', '#FF8C00', '#B22222', '#FFD700'];
-        
-        for (let i = 0; i < 12; i++) {
-            const leaf = document.createElement('div');
-            leaf.className = 'seasonal-element falling-leaf';
-            leaf.style.left = Math.random() * 100 + '%';
-            leaf.style.animationDelay = Math.random() * 10 + 's';
-            leaf.style.animationDuration = (10 + Math.random() * 10) + 's';
-            
-            const color = leafColors[Math.floor(Math.random() * leafColors.length)];
-            
-            // Create SVG leaf
-            leaf.innerHTML = `
-                <svg viewBox="0 0 60 60" width="40" height="40">
-                    <path d="M30 10 Q20 20 15 35 Q20 40 30 35 Q40 40 45 35 Q40 20 30 10" 
-                          fill="${color}" 
-                          stroke="#8B4513" 
-                          stroke-width="1"/>
-                    <line x1="30" y1="35" x2="30" y2="50" stroke="#8B4513" stroke-width="2"/>
-                </svg>
-            `;
-            
-            container.appendChild(leaf);
-        }
-    },
-
-    createButterflies(container) {
-        for (let i = 0; i < 8; i++) {
-            const butterfly = document.createElement('div');
-            butterfly.className = 'seasonal-element butterfly';
-            butterfly.style.left = Math.random() * 100 + '%';
-            butterfly.style.top = Math.random() * 100 + '%';
-            
-            // Create animated butterfly
-            butterfly.innerHTML = `
-                <svg viewBox="0 0 60 40" width="60" height="40" class="butterfly-svg">
-                    <g class="butterfly-wings">
-                        <path d="M30 20 Q20 10 10 15 Q15 25 30 20" fill="url(#butterflyGradient1)" class="wing-left"/>
-                        <path d="M30 20 Q40 10 50 15 Q45 25 30 20" fill="url(#butterflyGradient2)" class="wing-right"/>
-                        <rect x="28" y="15" width="4" height="10" rx="2" fill="#333"/>
-                    </g>
-                    <defs>
-                        <linearGradient id="butterflyGradient1">
-                            <stop offset="0%" stop-color="#FF69B4"/>
-                            <stop offset="100%" stop-color="#FFB6C1"/>
-                        </linearGradient>
-                        <linearGradient id="butterflyGradient2">
-                            <stop offset="0%" stop-color="#FFB6C1"/>
-                            <stop offset="100%" stop-color="#FF69B4"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-            `;
-            
-            // Random flight pattern
-            this.animateButterfly(butterfly);
-            container.appendChild(butterfly);
-        }
-    },
-
-    animateButterfly(butterfly) {
-        const duration = 15000 + Math.random() * 10000;
-        const startX = parseFloat(butterfly.style.left);
-        const startY = parseFloat(butterfly.style.top);
-        
-        butterfly.animate([
-            { transform: `translate(0, 0) rotate(0deg)` },
-            { transform: `translate(${Math.random() * 200 - 100}px, ${Math.random() * 100 - 50}px) rotate(10deg)` },
-            { transform: `translate(${Math.random() * 200 - 100}px, ${Math.random() * 100 - 50}px) rotate(-10deg)` },
-            { transform: `translate(0, 0) rotate(0deg)` }
-        ], {
-            duration: duration,
-            iterations: Infinity,
-            easing: 'cubic-bezier(0.45, 0.05, 0.55, 0.95)'
+        return new Promise((resolve) => {
+            console.log('🎨 Starting theme system initialization...');
+            // Theme system is already loaded via CSS
+            console.log('🎨 Theme system initialization complete');
+            resolve();
         });
     },
 
     initDeviceMotion() {
-        // Device orientation for tilt effects
-        if (window.DeviceOrientationEvent) {
-            let lastShakeTime = 0;
+        return new Promise((resolve) => {
+            console.log('📱 Starting device motion initialization...');
             
-            window.addEventListener('deviceorientation', (e) => {
-                this.state.orientation = {
-                    alpha: e.alpha || 0,
-                    beta: e.beta || 0,
-                    gamma: e.gamma || 0
-                };
-                
-                // Apply tilt to parallax layers
-                this.applyTiltEffect();
-            });
-        }
-        
-        // Shake detection
-        if (window.DeviceMotionEvent) {
-            let lastX = 0, lastY = 0, lastZ = 0;
-            const shakeThreshold = 15;
+            if (window.DeviceMotionEvent) {
+                // Bind the context properly to avoid 'this' issues
+                window.addEventListener('devicemotion', (e) => this.applyTiltEffect(e));
+                window.addEventListener('shake', (e) => this.onShakeDetected(e));
+                console.log('📱 Device motion listeners added');
+            } else {
+                console.log('📱 Device motion not supported');
+            }
             
-            window.addEventListener('devicemotion', (e) => {
-                const acc = e.accelerationIncludingGravity;
-                if (!acc) return;
-                
-                const deltaX = Math.abs(acc.x - lastX);
-                const deltaY = Math.abs(acc.y - lastY);
-                const deltaZ = Math.abs(acc.z - lastZ);
-                
-                if (deltaX + deltaY + deltaZ > shakeThreshold) {
-                    const now = Date.now();
-                    if (now - lastShakeTime > 1000) {
-                        this.onShakeDetected();
-                        lastShakeTime = now;
-                    }
-                }
-                
-                lastX = acc.x;
-                lastY = acc.y;
-                lastZ = acc.z;
-            });
-        }
+            console.log('📱 Device motion initialization complete');
+            resolve();
+        });
     },
 
     applyTiltEffect() {
+        // Safety check to prevent errors
+        if (!this.state || !this.state.orientation) {
+            console.log('📱 Orientation data not available yet');
+            return;
+        }
+        
         const { beta, gamma } = this.state.orientation;
         const tiltX = gamma / 90; // -1 to 1
         const tiltY = beta / 180; // -1 to 1
@@ -426,86 +274,80 @@ const Universe = {
     },
 
     initParallax() {
-        // Mouse parallax
-        let mouseX = 0, mouseY = 0;
-        let targetX = 0, targetY = 0;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+        return new Promise((resolve) => {
+            console.log('🌊 Starting parallax initialization...');
+            
+            const parallaxLayers = document.querySelectorAll('.parallax-layer');
+            
+            const updateParallax = () => {
+                const scrolled = window.pageYOffset;
+                parallaxLayers.forEach(layer => {
+                    const depth = parseFloat(layer.dataset.depth);
+                    const yPos = -(scrolled * depth);
+                    layer.style.transform = `translateY(${yPos}px)`;
+                });
+            };
+            
+            window.addEventListener('scroll', updateParallax);
+            console.log('🌊 Parallax initialization complete');
+            resolve();
         });
-        
-        const updateParallax = () => {
-            targetX += (mouseX - targetX) * 0.1;
-            targetY += (mouseY - targetY) * 0.1;
-            
-            document.querySelectorAll('.parallax-layer').forEach((layer) => {
-                const depth = parseFloat(layer.dataset.depth);
-                const moveX = targetX * depth * 50;
-                const moveY = targetY * depth * 30;
-                
-                layer.style.transform = `translate(${moveX}px, ${moveY}px)`;
-            });
-            
-            requestAnimationFrame(updateParallax);
-        };
-        
-        updateParallax();
     },
 
     initInteractions() {
-        // Touch to read aloud
-        document.querySelectorAll('[data-read-aloud="true"]').forEach(element => {
-            let isReading = false;
-            let longPressTimer;
+        return new Promise((resolve) => {
+            console.log('👆 Starting interactions initialization...');
             
-            const startReading = () => {
-                if (!isReading) {
-                    AudioEngine.speak(element.textContent);
-                    element.classList.add('reading');
-                    isReading = true;
-                } else {
-                    AudioEngine.stopSpeaking();
-                    element.classList.remove('reading');
-                    isReading = false;
-                }
-            };
-            
-            const startLongPress = () => {
-                longPressTimer = setTimeout(() => {
-                    // Show Hindi translation portal
-                    this.showHindiTranslation(element.textContent);
-                }, 800);
-            };
-            
-            const cancelLongPress = () => {
-                clearTimeout(longPressTimer);
-            };
-            
-            // Touch events
-            element.addEventListener('touchstart', startLongPress);
-            element.addEventListener('touchend', () => {
-                cancelLongPress();
-                if (!longPressTimer) startReading();
-            });
-            
-            // Mouse events for desktop
-            element.addEventListener('click', startReading);
-            element.addEventListener('mousedown', startLongPress);
-            element.addEventListener('mouseup', cancelLongPress);
-            element.addEventListener('mouseleave', cancelLongPress);
-        });
-        
-        // Card hover effects
-        document.querySelectorAll('.content-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                const sound = card.dataset.sound;
-                if (sound) AudioEngine.playEffect(sound);
+            // Touchable elements
+            document.querySelectorAll('.touchable').forEach(element => {
+                const startReading = () => {
+                    const text = element.textContent.trim();
+                    if (window.speechSynthesis) {
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.rate = 0.8;
+                        speechSynthesis.speak(utterance);
+                    }
+                };
                 
-                // Show creature if specified
-                const creature = card.dataset.creature;
-                if (creature) CreatureSystem.showCreature(creature);
+                const startLongPress = () => {
+                    element.longPressTimer = setTimeout(() => {
+                        this.showHindiTranslation(element.textContent.trim());
+                    }, 1000);
+                };
+                
+                const cancelLongPress = () => {
+                    if (element.longPressTimer) {
+                        clearTimeout(element.longPressTimer);
+                        element.longPressTimer = null;
+                    }
+                };
+                
+                // Touch events for mobile
+                element.addEventListener('touchstart', startLongPress);
+                element.addEventListener('touchend', cancelLongPress);
+                element.addEventListener('touchcancel', cancelLongPress);
+                
+                // Mouse events for desktop
+                element.addEventListener('click', startReading);
+                element.addEventListener('mousedown', startLongPress);
+                element.addEventListener('mouseup', cancelLongPress);
+                element.addEventListener('mouseleave', cancelLongPress);
             });
+            
+            // Card hover effects
+            document.querySelectorAll('.content-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    const sound = card.dataset.sound;
+                    if (sound) AudioEngine.playEffect(sound);
+                    
+                    // Show creature if specified
+                    const creature = card.dataset.creature;
+                    if (creature) CreatureSystem.showCreature(creature);
+                });
+            });
+            
+            console.log('👆 Interactions initialization complete');
+            resolve();
         });
     },
 
@@ -539,11 +381,19 @@ const Universe = {
     },
 
     hideLoadingScreen() {
+        console.log('🌌 Attempting to hide loading screen...');
         const loadingScreen = document.getElementById('loadingScreen');
         
+        if (!loadingScreen) {
+            console.log('✅ No loading screen found - proceeding normally');
+            return;
+        }
+        
+        console.log('✅ Hiding loading screen now');
         loadingScreen.style.opacity = '0';
         setTimeout(() => {
             loadingScreen.style.display = 'none';
+            console.log('✅ Loading screen hidden');
         }, 500);
     },
 
@@ -578,9 +428,5 @@ const Universe = {
     }
 };
 
-// Auto-init when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => Universe.init());
-} else {
-    Universe.init();
-}
+console.log('🌌 Universe object created:', typeof Universe);
+console.log('🌌 universe.js loaded completely - waiting for HTML initialization');

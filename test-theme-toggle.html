@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Toggle Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        :root {
+            --student-hue: 200;
+            --student-accent: hsl(var(--student-hue), 70%, 60%);
+            --student-accent-soft: hsl(var(--student-hue), 60%, 95%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Toggle Button -->
+    <button class="background-toggle" id="backgroundToggle" title="Toggle background theme">
+        🌙
+    </button>
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="date-badge floating">December 15, 2024</div>
+            
+            <h1 class="student-name magical-text">
+                Anaya
+                <span class="name-sparkles"></span>
+            </h1>
+            
+            <p class="hero-greeting">Welcome back to your learning universe</p>
+        </section>
+
+        <!-- Test Card -->
+        <section class="content-card floating-card">
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M24 4l5.5 11.1L42 17l-9 8.8L35.1 38 24 32.2 12.9 38 15 25.8 6 17l12.5-1.9z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Test Card</h2>
+            </header>
+            
+            <div class="card-content">
+                <p>This is a test card with the new light yellow background (#fcfbf7). The toggle button in the top right allows you to switch between the purple gradient background and the light yellow background.</p>
+            </div>
+        </section>
+
+        <!-- Another Test Card -->
+        <section class="content-card floating-card">
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M4 6h8c2.2 0 4 1.8 4 4v28c0-1.7-1.3-3-3-3H4V6zm40 0h-8c-2.2 0-4 1.8-4 4v28c0-1.7 1.3-3 3-3h9V6z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Another Test Card</h2>
+            </header>
+            
+            <div class="card-content">
+                <p>When the background is purple gradient, the student name should be white. When the background is light yellow, the student name should be dark for proper contrast.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Background toggle functionality
+        function initBackgroundToggle() {
+            const toggleBtn = document.getElementById('backgroundToggle');
+            const body = document.body;
+            
+            // Check for saved preference
+            const savedTheme = localStorage.getItem('backgroundTheme');
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                toggleBtn.classList.add('light-mode');
+                toggleBtn.textContent = '☀️';
+            }
+            
+            toggleBtn.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                toggleBtn.classList.toggle('light-mode');
+                
+                if (body.classList.contains('light-mode')) {
+                    toggleBtn.textContent = '☀️';
+                    localStorage.setItem('backgroundTheme', 'light');
+                } else {
+                    toggleBtn.textContent = '🌙';
+                    localStorage.setItem('backgroundTheme', 'dark');
+                }
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initBackgroundToggle();
+        });
+    </script>
+</body>
+</html> 

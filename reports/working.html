@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="minimal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>anaya · Learning Universe</title>
+    <meta name="description" content="A magical learning journey">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/themes/minimal.css" id="theme-stylesheet">
+    
+    <style>
+        /* Enhanced minimal theme with better color consistency */
+        :root {
+            --student-hue: 349.2;
+            --student-accent: hsl(var(--student-hue), 70%, 60%);
+            --student-accent-soft: hsl(var(--student-hue), 60%, 95%);
+            --student-accent-dark: hsl(var(--student-hue), 70%, 45%);
+            
+            /* Enhanced minimal color palette */
+            --paper-white: #ffffff;
+            --paper-cream: #fafafa;
+            --ink-dark: #1a1a1a;
+            --ink-medium: #4a4a4a;
+            --ink-light: #6b6b6b;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            
+            /* Enhanced shadows */
+            --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.12);
+            
+            /* Enhanced borders */
+            --border-light: 1px solid rgba(0, 0, 0, 0.08);
+            --border-medium: 1px solid rgba(0, 0, 0, 0.12);
+            --radius-small: 12px;
+            --radius-medium: 16px;
+            --radius-large: 24px;
+        }
+
+        /* Clean card styling matching minimal working.html */
+        .content-card {
+            background: var(--paper-white);
+            border-radius: var(--radius-medium);
+            padding: 48px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-soft);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: gentleFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--student-accent) 0%, var(--student-accent-soft) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .content-card:hover::before {
+            opacity: 1;
+        }
+
+        .content-card[data-delay="1"] { animation-delay: 0.6s; }
+        .content-card[data-delay="2"] { animation-delay: 0.8s; }
+        .content-card[data-delay="3"] { animation-delay: 1.0s; }
+        .content-card[data-delay="4"] { animation-delay: 1.2s; }
+
+        @keyframes gentleFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Clean section titles */
+        .section-title {
+            font-family: 'EB Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--ink-dark);
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            opacity: 0.8;
+        }
+
+        .section-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--student-accent);
+        }
+
+        /* Clean content text */
+        .card-content {
+            color: var(--ink-medium);
+            opacity: 0.85;
+            line-height: 1.8;
+        }
+
+        .card-content p {
+            margin-bottom: 16px;
+        }
+
+        .card-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Clean badges */
+        .subject-badge,
+        .magical-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--student-accent-soft);
+            color: var(--student-accent);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        /* Clean mission styling */
+        .mission-name {
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: var(--student-accent);
+            font-size: 1.1rem;
+        }
+
+        .mission-description {
+            margin-bottom: 16px;
+        }
+
+        .mission-motivation {
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .sparkle-text {
+            color: var(--student-accent);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Clean parent report grid */
+        .parent-report-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .report-item {
+            background: var(--paper-cream);
+            padding: 16px;
+            border-radius: var(--radius-small);
+            border: var(--border-light);
+        }
+
+        .report-label {
+            color: var(--student-accent);
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .report-item p {
+            color: var(--ink-medium);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Clean tap hint */
+        .tap-hint {
+            text-align: center;
+            color: var(--ink-light);
+            font-size: 0.875rem;
+            padding: 12px 0;
+            font-style: italic;
+            opacity: 0.7;
+        }
+
+        /* Clean hidden treasure */
+        .hidden-treasure {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-purple));
+            color: white;
+            padding: 16px;
+            border-radius: var(--radius-small);
+            margin-top: 16px;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hidden-treasure.revealed {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .treasure-emoji {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+
+
+        /* Arcade Button - Exact copy from minimal working.html */
+        .arcade-section {
+            text-align: center;
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .arcade-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 40px;
+            background: var(--ink-dark);
+            color: var(--paper-white);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arcade-button::before {
+            content: '✨';
+            position: absolute;
+            font-size: 60px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .arcade-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .arcade-button:hover::before {
+            opacity: 0.1;
+            transform: translateY(-20px);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 640px) {
+            .content-card {
+                padding: 32px 24px;
+            }
+            
+            .section-title {
+                font-size: 1.25rem;
+            }
+            
+            .subject-badge,
+            .magical-badge {
+                font-size: 0.8rem;
+            }
+            
+            .mission-name {
+                font-size: 1rem;
+            }
+            
+            .parent-report-grid {
+                gap: 12px;
+            }
+            
+            .report-item {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="magic-circle">
+                <svg viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="80" class="circle-outer" />
+                    <circle cx="100" cy="100" r="60" class="circle-middle" />
+                    <circle cx="100" cy="100" r="40" class="circle-inner" />
+                </svg>
+            </div>
+            <p class="loading-text">Preparing your magical journey...</p>
+        </div>
+    </div>
+    
+    <div class="universe-container">
+        <canvas id="magicCanvas"></canvas>
+        
+        <div class="parallax-layer" data-depth="0.1">
+            <div class="clouds"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.3">
+            <div class="floating-elements"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.5">
+            <div class="fireflies"></div>
+        </div>
+    </div>
+
+    <div class="learning-tree-container">
+        <div class="tree-stage" id="learningTree"></div>
+        <div class="tree-info">
+            <span class="visits-count">Visit #<span id="visitNumber">1</span></span>
+            <span class="tree-stage-name" id="treeStageName">Seedling</span>
+        </div>
+    </div>
+    
+    <div class="top-animals-container" id="topAnimalsContainer">
+    </div>
+    
+    <div class="animals-container" id="animalsContainer">
+    </div>
+    
+    <main class="content-wrapper">
+        <section class="hero-section" id="heroSection">
+            <div class="hero-particles" id="heroParticles"></div>
+            
+            <div class="date-badge floating">23 July 2025</div>
+            
+            <h1 class="student-name magical-text">
+                anaya
+                <span class="name-sparkles"></span>
+            </h1>
+            
+            <p class="hero-greeting">Welcome back to your learning universe</p>
+        </section>
+        
+        <section class="content-card" data-delay="1">
+            <h2 class="section-title">
+                <svg class="section-icon animated-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 2l3.09 6.26L26 9.27l-5 4.87 1.18 6.88L16 17.77l-6.18 3.25L11 14.14 6 9.27l6.91-1.01L16 2z">
+                        <animate attributeName="stroke-dasharray" values="0 100;100 0" dur="2s" repeatCount="indefinite"/>
+                    </path>
+                </svg>
+                Today's Reflection
+            </h2>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="reflection-text">
+                    🌟 Amazing work today, Anaya! You did a fantastic job exploring some tricky English ideas. Your curiosity about South Korea and how to talk about it was a wonderful way to bring the lesson to life! 🚀
+                </p>
+            </div>
+            
+            <div class="tap-hint">Tap to hear • Long press for Hindi</div>
+        </section>
+        
+        <section class="content-card" data-delay="2">
+            <div class="subject-creature-container">
+                <div class="creature-home" id="creatureHome">
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <svg class="section-icon animated-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z">
+                        <animate attributeName="stroke-dasharray" values="0 100;100 0" dur="3s" repeatCount="indefinite"/>
+                    </path>
+                </svg>
+                What We Explored
+            </h2>
+            
+            <div class="subject-badge magical-badge">English: The Superpowers of 'Would' and 'Could'!</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <p class="learning-content">
+                    Today's adventure: Unlocking the power to talk about wishes, possibilities, and 'what ifs'! We discovered how 'would like to' is a polite key to express our dreams, like wanting to visit South Korea. We also explored how 'would have' and 'could have' are like a time machine, letting us talk about a past that *almost* happened (like 'I would have called, but my phone ran out of battery!'). This is a huge step in sounding more natural and expressing complex thoughts in English.
+                </p>
+            </div>
+        </section>
+        
+        <section class="content-card" data-delay="3">
+            <h2 class="section-title">
+                <svg class="section-icon animated-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="16" cy="16" r="14">
+                        <animate attributeName="stroke-dasharray" values="0 88;88 0" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <path d="M16 8v8l5.5 3">
+                        <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+                    </path>
+                </svg>
+                Your Mission
+            </h2>
+            
+            <div class="mission-name">🎯 The 'What If' Storyteller</div>
+            
+            <div class="card-content touchable" data-read-aloud="true">
+                <div class="mission-description">
+                    <p>Your mission: Become a master of past possibilities and future wishes! Step 1: Think of one thing you COULDN'T do yesterday (e.g., 'I couldn't eat ice cream'). Step 2: Now, create a 'what if' sentence about it: 'I WOULD HAVE eaten ice cream, BUT...' (e.g., '...the shop was closed.'). Step 3: Finally, write one sentence about a wish for tomorrow using 'I would like to...'. Bonus challenge: Draw a small picture for each of your three sentences!</p>
+                </div>
+                
+                <div class="mission-motivation">
+                    <span class="sparkle-text">✨ Why it's amazing:</span>
+                    <p>This activity is amazing because it helps your brain build stronger pathways for these tricky grammar rules. You're not just memorizing words; you are practicing the real-life skills of explaining situations, expressing regrets, and sharing your hopes with others. This is how you truly master a language!</p>
+                </div>
+            </div>
+            
+            <div class="hidden-treasure" id="hiddenTreasure">
+                <span class="treasure-emoji">🎁</span>
+                <p class="treasure-message">Secret discovered! You're amazing!</p>
+            </div>
+        </section>
+        
+        <section class="content-card" data-delay="4">
+            <h2 class="section-title">
+                <svg class="section-icon animated-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                    <path d="M28 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M21 3.13a4 4 0 0 1 0 7.75">
+                        <animate attributeName="opacity" values="1;0.5;1" dur="3s" repeatCount="indefinite"/>
+                    </path>
+                </svg>
+                Family Update
+            </h2>
+            
+            <div class="parent-report-grid">
+                <div class="report-item">
+                    <strong class="report-label">Today's Focus</strong>
+                    <p>Development of fluency with modal verbs ('would,' 'could,' 'will') to express complex ideas like wishes, regrets, and possibilities.</p>
+                </div>
+                
+                <div class="report-item">
+                    <strong class="report-label">Progress Made</strong>
+                    <p>Key concepts: Making polite offers and expressing wishes ('Would you like to...'), describing unrealized past actions ('I would have done X, but Y happened'), and differentiating past ability ('I could') from missed opportunities ('I could have'). We used role-playing a guest's arrival and personal interests like South Korea to make it practical.</p>
+                </div>
+                
+                <div class="report-item">
+                    <strong class="report-label">Home Practice</strong>
+                    <p>The 'What If' Storyteller activity: Anaya will write three sentences to practice today's concepts. This reinforces the difference between 'couldn't', 'would have', and 'would like to'. Expected time: 5-10 minutes.</p>
+                </div>
+                
+                <div class="report-item">
+                    <strong class="report-label">Special Notes</strong>
+                    <p>💡 Breakthrough moment: Anaya's engagement soared when we discussed South Korea. She instantly saw the real-world value of using 'I would like to...' to talk about her interests. Growth area: We're strengthening the use of the correct past tense in the 'reason' part of a sentence (e.g., '...but I *did not have* a pen' instead of '...but I *have no* pen'). Ask your child about the beautiful things she's seen in South Korean dramas—it's a great way to let her teach you! To support at home: When watching a show, you could ask, 'What do you think the character *would have done* if things were different?'</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Arcade -->
+        <section class="arcade-section">
+            <a href="https://amanrajyadav.github.io/fluence-quiz/" class="arcade-button" id="arcadeBtn">
+                <span>Enter Learning Arcade</span>
+                <span style="font-size: 1.2rem;">→</span>
+            </a>
+        </section>
+    </main>
+    
+    <div class="shake-overlay" id="shakeOverlay">
+        <div class="stardust-container" id="stardustContainer"></div>
+        <div class="shake-message">
+            <h3>✨ Magic Unlocked! ✨</h3>
+            <p>You found a hidden surprise!</p>
+        </div>
+    </div>
+    
+    <script src="../assets/js/universe.js"></script>
+    <script src="../assets/js/creatures.js"></script>
+    <script src="../assets/js/audio.js"></script>
+    <script src="../assets/js/particles.js"></script>
+    <script src="../assets/js/tree.js"></script>
+    <script src="../assets/js/features.js"></script>
+    <script src="../assets/js/magic.js"></script>
+    
+    <script>
+        console.log('🔧 Initialization script starting...');
+        
+        // Initialize with student data
+        window.STUDENT_DATA = {
+            name: 'anaya',
+            id: 'student1',
+            hue: 349.2,
+            subject: 'English: The Superpowers of \'Would\' and \'Could\'!',
+            visitCount: parseInt(localStorage.getItem('visits_student1') || '0') + 1
+        };
+        
+        console.log('🔧 Student data set:', window.STUDENT_DATA);
+        console.log('🔧 Universe object available:', typeof Universe);
+        
+        // Start the magic - IMMEDIATE INITIALIZATION
+        console.log('🔧 About to call Universe.init()...');
+        Universe.init();
+        console.log('🔧 Universe.init() called successfully');
+    </script>
+</body>
+</html>

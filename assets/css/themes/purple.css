@@ -1,6 +1,6 @@
-/* minimal.css - Clean, paper-like theme inspired by Japanese minimalism */
+/* purple.css - Purple theme with golden accents */
 
-[data-theme="minimal"] {
+[data-theme="purple"] {
     /* Color Palette */
     --paper: #f1f1f1;
     --paper-alt: #f1f1f1;
@@ -10,7 +10,7 @@
     --shadow-color: rgba(0, 0, 0, 0.08);
     --border-color: rgba(0, 0, 0, 0.06);
     
-    /* Backgrounds - Restored beautiful purple gradient */
+    /* Backgrounds */
     --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --bg-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --bg-card: #FFFFFF;
@@ -32,265 +32,260 @@
 }
 
 /* Base Styles */
-[data-theme="minimal"] body {
+[data-theme="purple"] body {
     background: var(--bg-primary);
     background-attachment: fixed;
     color: var(--text-primary);
 }
 
 /* Loading Screen */
-[data-theme="minimal"] .loading-screen {
+[data-theme="purple"] .loading-screen {
     background: var(--bg-primary);
     background-attachment: fixed;
 }
 
-[data-theme="minimal"] .loading-text {
+[data-theme="purple"] .loading-text {
     color: var(--text-secondary);
 }
 
-[data-theme="minimal"] .circle-outer,
-[data-theme="minimal"] .circle-middle,
-[data-theme="minimal"] .circle-inner {
+[data-theme="purple"] .circle-outer,
+[data-theme="purple"] .circle-middle,
+[data-theme="purple"] .circle-inner {
     stroke: var(--student-accent);
 }
 
 /* Theme Toggle */
-[data-theme="minimal"] .theme-toggle {
+[data-theme="purple"] .theme-toggle {
     background: var(--bg-card);
     color: var(--student-accent);
     box-shadow: var(--shadow);
     border: var(--border);
 }
 
-[data-theme="minimal"] .theme-toggle:hover {
+[data-theme="purple"] .theme-toggle:hover {
     background: var(--bg-hover);
     transform: scale(1.05);
 }
 
 /* Universe Container */
-[data-theme="minimal"] #magicCanvas {
+[data-theme="purple"] #magicCanvas {
     opacity: 0.3;
 }
 
-[data-theme="minimal"] .clouds {
+[data-theme="purple"] .clouds {
     opacity: 0.8;
 }
 
 /* Hero Section */
-[data-theme="minimal"] .date-badge {
+[data-theme="purple"] .date-badge {
     background: var(--student-accent-soft);
     color: var(--student-accent);
     box-shadow: var(--shadow-sm);
 }
 
-[data-theme="minimal"] .student-name {
-    color: white !important;
+/* SPECIFIC STYLING FOR PURPLE THEME - HIGHER SPECIFICITY */
+html[data-theme="purple"] .student-name {
+    color: #FFD700 !important; /* Golden Yellow */
+    -webkit-text-fill-color: #FFD700 !important;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3) !important;
 }
 
-[data-theme="minimal"] .magical-text {
-    color: white !important;
-    background: none !important;
-    -webkit-background-clip: initial !important;
-    -webkit-text-fill-color: white !important;
-    background-clip: initial !important;
+html[data-theme="purple"] .magical-text {
+    background: linear-gradient(135deg, #FFD700, #FFA500) !important; /* Golden Yellow to Orange gradient */
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
 }
 
-[data-theme="minimal"] .hero-greeting {
-    color: white !important;
+html[data-theme="purple"] .hero-greeting {
+    color: #FFFFFF !important; /* White color for hero greeting */
+    -webkit-text-fill-color: #FFFFFF !important;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5) !important;
 }
 
 /* Avatar */
-[data-theme="minimal"] .student-avatar-container {
+[data-theme="purple"] .student-avatar-container {
     display: none;
 }
 
-[data-theme="minimal"] .avatar-aura {
+[data-theme="purple"] .avatar-aura {
     opacity: 0.3;
 }
 
-[data-theme="minimal"] .avatar-inner {
+[data-theme="purple"] .avatar-inner {
     background: linear-gradient(135deg, var(--student-accent), var(--student-accent-soft));
     box-shadow: var(--shadow);
 }
 
 /* Content Cards */
-[data-theme="minimal"] .content-card {
-    background: #ffffff !important;
+[data-theme="purple"] .content-card {
+    background: var(--bg-card);
     box-shadow: var(--shadow);
-    border: 2px solid #ffffff !important;
-    opacity: 1 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    border: var(--border);
 }
 
-[data-theme="minimal"] .content-card:hover {
+[data-theme="purple"] .content-card:hover {
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
 }
 
-[data-theme="minimal"] .card-background-effect {
-    display: none !important;
+[data-theme="purple"] .card-background-effect {
+    background: radial-gradient(circle at 50% 50%, var(--bg-hover), transparent);
 }
 
 /* Section Headers */
-[data-theme="minimal"] .section-icon {
-    background: #f8f9fa !important;
+[data-theme="purple"] .section-icon {
+    background: var(--bg-secondary);
     color: var(--student-accent);
-    border: 1px solid #e9ecef !important;
 }
 
-[data-theme="minimal"] .icon-path {
+[data-theme="purple"] .icon-path {
     stroke: currentColor;
 }
 
-[data-theme="minimal"] .section-title {
+[data-theme="purple"] .section-title {
     color: var(--text-primary);
 }
 
 /* Badges */
-[data-theme="minimal"] .subject-badge,
-[data-theme="minimal"] .magical-badge {
-    background: #e3f2fd !important;
+[data-theme="purple"] .subject-badge,
+[data-theme="purple"] .magical-badge {
+    background: var(--student-accent-soft);
     color: var(--student-accent);
-    border: 1px solid var(--student-accent) !important;
 }
 
 /* Content */
-[data-theme="minimal"] .content-text {
+[data-theme="purple"] .content-text {
     color: var(--text-secondary);
 }
 
-[data-theme="minimal"] .tap-hint {
+[data-theme="purple"] .tap-hint {
     color: var(--text-muted);
 }
 
 /* Mission Card */
-[data-theme="minimal"] .mission-motivation {
-    background: #f8f9fa !important;
-    border: 1px solid #e9ecef !important;
-    color: #495057 !important;
+[data-theme="purple"] .mission-motivation {
+    background: var(--bg-secondary);
 }
 
-[data-theme="minimal"] .sparkle-text {
+[data-theme="purple"] .sparkle-text {
     color: var(--student-accent);
 }
 
 /* Parent Report */
-[data-theme="minimal"] .report-item {
-    background: #f8f9fa !important;
-    border: 1px solid #e9ecef !important;
-    color: #495057 !important;
+[data-theme="purple"] .report-item {
+    background: var(--bg-secondary);
 }
 
-[data-theme="minimal"] .report-label {
+[data-theme="purple"] .report-label {
     color: var(--text-muted);
 }
 
 /* Arcade Portal */
-[data-theme="minimal"] .ring {
+[data-theme="purple"] .ring {
     border-color: var(--student-accent);
     opacity: 0.3;
 }
 
-[data-theme="minimal"] .arcade-button {
+[data-theme="purple"] .arcade-button {
     background: var(--text-primary);
     color: var(--bg-primary);
     box-shadow: var(--shadow);
 }
 
-[data-theme="minimal"] .arcade-button:hover {
+[data-theme="purple"] .arcade-button:hover {
     box-shadow: var(--shadow-lg);
     transform: translateY(-4px);
 }
 
-[data-theme="minimal"] .button-bg {
+[data-theme="purple"] .button-bg {
     background: linear-gradient(135deg, var(--student-accent), var(--student-accent-soft));
 }
 
 /* Audio Controls */
-[data-theme="minimal"] .audio-controls {
+[data-theme="purple"] .audio-controls {
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow);
 }
 
-[data-theme="minimal"] .audio-ambient {
+[data-theme="purple"] .audio-ambient {
     background: var(--bg-card);
     color: var(--text-primary);
     border: var(--border);
 }
 
-[data-theme="minimal"] .audio-ambient.active {
+[data-theme="purple"] .audio-ambient.active {
     background: var(--student-accent);
     color: white;
 }
 
-[data-theme="minimal"] .volume-slider input {
+[data-theme="purple"] .volume-slider input {
     background: var(--bg-secondary);
 }
 
-[data-theme="minimal"] .volume-slider input::-webkit-slider-thumb {
+[data-theme="purple"] .volume-slider input::-webkit-slider-thumb {
     background: var(--student-accent);
 }
 
 /* Learning Tree */
-[data-theme="minimal"] .learning-tree-container {
+[data-theme="purple"] .learning-tree-container {
     display: none;
 }
 
-[data-theme="minimal"] .tree-info {
+[data-theme="purple"] .tree-info {
     color: var(--text-secondary);
 }
 
 /* Seasonal Elements */
-[data-theme="minimal"] .seasonal-element {
+[data-theme="purple"] .seasonal-element {
     opacity: 0.6;
 }
 
 /* Particles */
-[data-theme="minimal"] .firefly {
+[data-theme="purple"] .firefly {
     opacity: 0.7;
 }
 
-[data-theme="minimal"] .ambient-particle {
+[data-theme="purple"] .ambient-particle {
     opacity: 0.4;
 }
 
 /* Shake Message */
-[data-theme="minimal"] .shake-message {
+[data-theme="purple"] .shake-message {
     background: var(--bg-card);
     color: var(--text-primary);
     box-shadow: var(--shadow-lg);
 }
 
 /* Translation Portal */
-[data-theme="minimal"] .portal-content {
+[data-theme="purple"] .portal-content {
     background: var(--bg-card);
     color: var(--text-primary);
     box-shadow: var(--shadow-lg);
 }
 
 /* Scrollbar */
-[data-theme="minimal"] ::-webkit-scrollbar {
+[data-theme="purple"] ::-webkit-scrollbar {
     width: 10px;
 }
 
-[data-theme="minimal"] ::-webkit-scrollbar-track {
+[data-theme="purple"] ::-webkit-scrollbar-track {
     background: var(--bg-secondary);
 }
 
-[data-theme="minimal"] ::-webkit-scrollbar-thumb {
+[data-theme="purple"] ::-webkit-scrollbar-thumb {
     background: var(--whisper);
     border-radius: 5px;
 }
 
-[data-theme="minimal"] ::-webkit-scrollbar-thumb:hover {
+[data-theme="purple"] ::-webkit-scrollbar-thumb:hover {
     background: var(--ink-soft);
 }
 
 /* Print Styles */
 @media print {
-    [data-theme="minimal"] {
+    [data-theme="purple"] {
         --bg-primary: white;
         --bg-card: white;
         --shadow: none;
@@ -298,37 +293,16 @@
     }
 }
 
-/* Animations are more subtle in minimal theme */
-[data-theme="minimal"] * {
+/* Animations are more subtle in purple theme */
+[data-theme="purple"] * {
     animation-duration: 0.8s !important;
 }
 
-[data-theme="minimal"] .floating-card {
+[data-theme="purple"] .floating-card {
     animation: subtleFloat 10s ease-in-out infinite;
-    background: #ffffff !important;
-    opacity: 1 !important;
-    border: 2px solid #ffffff !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-}
-
-/* Universe and Parallax Layer - Keep beautiful background */
-[data-theme="minimal"] .universe-container {
-    opacity: 1 !important;
-}
-
-[data-theme="minimal"] .parallax-layer {
-    opacity: 0.6 !important;
-}
-
-/* Ensure main content area has proper background */
-[data-theme="minimal"] .content-wrapper {
-    background: transparent;
-    position: relative;
-    z-index: 100;
 }
 
 @keyframes subtleFloat {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-3px); }
-}
+} 

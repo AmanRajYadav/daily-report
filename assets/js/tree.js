@@ -39,7 +39,21 @@ const LearningTree = {
     },
 
     init() {
-        this.createCanvas();
+        // Prevent duplicate initialization
+        if (this.initialized) {
+            console.log('🌳 LearningTree already initialized, skipping');
+            return;
+        }
+        
+        console.log('🌳 Initializing LearningTree');
+        this.initialized = true;
+        
+        // If canvas creation fails, abort initialization
+        if (this.createCanvas() === false) {
+            console.log('🌳 LearningTree initialization aborted - no container');
+            return;
+        }
+        
         this.loadProgress();
         this.determineStage();
         this.generateTree();
@@ -49,8 +63,21 @@ const LearningTree = {
 
     createCanvas() {
         const container = document.getElementById('learningTree');
-        if (!container) return;
+        if (!container) {
+            console.log('❌ LearningTree container not found');
+            this.initialized = false; // Reset initialization flag
+            return false;
+        }
         
+        // Check if canvas already exists
+        if (container.querySelector('canvas')) {
+            console.log('✅ Canvas already exists in container');
+            this.canvas = container.querySelector('canvas');
+            this.ctx = this.canvas.getContext('2d');
+            return true;
+        }
+        
+        console.log('✅ Creating LearningTree canvas');
         this.canvas = document.createElement('canvas');
         this.canvas.width = 120;
         this.canvas.height = 150;
@@ -329,6 +356,12 @@ const LearningTree = {
     },
 
     animate() {
+        // Check if context exists before animating
+        if (!this.ctx || !this.canvas) {
+            console.log('⚠️ Tree animation skipped - no canvas context');
+            return;
+        }
+        
         this.state.time += 0.02;
         
         // Clear canvas

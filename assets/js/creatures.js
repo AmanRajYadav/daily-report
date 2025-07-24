@@ -22,26 +22,12 @@ const CreatureSystem = {
             size: 60,
             animations: ['idle', 'flutter', 'write']
         },
-        'history-lion': {
-            name: 'Chronos',
-            type: 'lion',
-            color: '#F4A460',
-            size: 85,
-            animations: ['idle', 'roar', 'majestic']
-        },
-        'art-peacock': {
-            name: 'Palette',
-            type: 'peacock',
-            color: '#9B5DE5',
-            size: 90,
-            animations: ['idle', 'display', 'paint']
-        },
-        'star': {
-            name: 'Twinkle',
-            type: 'star',
-            color: '#FFE66D',
-            size: 50,
-            animations: ['idle', 'pulse', 'shoot']
+        'social-science-dog': {
+            name: 'Socrates',
+            type: 'dog',
+            color: '#D2691E',
+            size: 75,
+            animations: ['idle', 'wag', 'bark']
         }
     },
     
@@ -56,12 +42,62 @@ const CreatureSystem = {
         { name: 'hedgehog', speed: 1, size: 30, color: '#8B4513' }
     ],
     
+    // GIF animals configuration - 26 animals named a-z with speed control
+    gifAnimals: [
+        { name: 'a', size: 'large', filename: 'a.gif', speed: 0.5 },
+        { name: 'b', size: 'medium', filename: 'b.gif', speed: 0.5 },
+        { name: 'c', size: 'small', filename: 'c.gif', speed: 0.5 },
+        { name: 'd', size: 'medium', filename: 'd.gif', speed: 0.5 },
+        { name: 'e', size: 'large', filename: 'e.gif', speed: 0.5 },
+        { name: 'f', size: 'medium', filename: 'f.gif', speed: 0.5 },
+        { name: 'g', size: 'small', filename: 'g.gif', speed: 0.5 },
+        { name: 'h', size: 'medium', filename: 'h.gif', speed: 0.5 },
+        { name: 'i', size: 'small', filename: 'i.gif', speed: 0.5 },
+        { name: 'j', size: 'medium', filename: 'j.gif', speed: 0.5 },
+        { name: 'k', size: 'large', filename: 'k.gif', speed: 0.5 },
+        { name: 'l', size: 'medium', filename: 'l.gif', speed: 0.5 },
+        { name: 'm', size: 'large', filename: 'm.gif', speed: 0.5 },
+        { name: 'n', size: 'medium', filename: 'n.gif', speed: 0.5 },
+        { name: 'o', size: 'small', filename: 'o.gif', speed: 0.5 },
+        { name: 'p', size: 'medium', filename: 'p.gif', speed: 0.5 },
+        { name: 'q', size: 'large', filename: 'q.gif', speed: 0.5 },
+        { name: 'r', size: 'medium', filename: 'r.gif', speed: 0.5 },
+        { name: 's', size: 'small', filename: 's.gif', speed: 0.5 },
+        { name: 't', size: 'medium', filename: 't.gif', speed: 0.5 },
+        { name: 'u', size: 'small', filename: 'u.gif', speed: 0.5 },
+        { name: 'v', size: 'medium', filename: 'v.gif', speed: 0.5 },
+        { name: 'w', size: 'large', filename: 'w.gif', speed: 0.5 },
+        { name: 'x', size: 'medium', filename: 'x.gif', speed: 0.5 },
+        { name: 'y', size: 'small', filename: 'y.gif', speed: 0.5 },
+        { name: 'z', size: 'medium', filename: 'z.gif', speed: 0.5 }
+    ],
+    
     activeCreatures: new Map(),
     activeAnimals: [],
     
+    // GIF animals state
+    gifAnimalState: {
+        currentSequence: [],
+        sequenceIndex: 0,
+        isRunning: false,
+        intervalId: null,
+        lastScrollY: 0,
+        scrollThreshold: 100
+    },
+    
     init() {
+        // Prevent duplicate initialization
+        if (this.initialized) {
+            console.log('🦊 CreatureSystem already initialized, skipping');
+            return;
+        }
+        
+        console.log('🦊 Initializing CreatureSystem');
+        this.initialized = true;
+        
         this.initSubjectCreature();
         this.initWalkingAnimals();
+        this.initGifAnimals();
         this.startAnimationLoop();
     },
     
@@ -69,31 +105,46 @@ const CreatureSystem = {
         const subjectTitle = window.STUDENT_DATA?.subject?.toLowerCase() || '';
         let creatureType = 'star'; // default
         
+        console.log(`📚 Subject: "${subjectTitle}"`);
+        
         // Match subject to creature
         if (subjectTitle.includes('math')) creatureType = 'math-dragon';
         else if (subjectTitle.includes('science')) creatureType = 'science-owl';
         else if (subjectTitle.includes('english')) creatureType = 'english-butterfly';
-        else if (subjectTitle.includes('history')) creatureType = 'history-lion';
-        else if (subjectTitle.includes('art')) creatureType = 'art-peacock';
+        else if (subjectTitle.includes('social')) creatureType = 'social-science-dog';
+        else creatureType = 'social-science-dog'; // Default to dog
+        
+        console.log(`🦊 Selected creature type: ${creatureType}`);
         
         // Find creature home
         const creatureHome = document.getElementById('creatureHome');
         if (creatureHome) {
+            console.log('✅ Creature home found, creating creature');
             this.createCreature(creatureType, creatureHome);
+        } else {
+            console.log('❌ Creature home not found');
         }
     },
     
     createCreature(type, container) {
+        // Check if creature already exists
+        if (this.activeCreatures.has(type)) {
+            console.log(`🦊 Creature ${type} already exists, skipping creation`);
+            return;
+        }
+        
         const creatureData = this.creatures[type];
         if (!creatureData) return;
+        
+        console.log(`🦊 Creating creature: ${type}`);
         
         const creature = document.createElement('div');
         creature.className = 'subject-creature';
         creature.dataset.type = type;
+        creature.dataset.creature = type; // Add this for lazy loader
         
-        // Create SVG based on creature type
-        const svg = this.generateCreatureSVG(creatureData);
-        creature.appendChild(svg);
+        // Try to load external SVG first, fallback to generated
+        this.loadCreatureSprite(type, creature, creatureData);
         
         container.appendChild(creature);
         
@@ -107,6 +158,28 @@ const CreatureSystem = {
         
         // Start idle animation
         this.animateCreature(type, 'idle');
+    },
+
+    async loadCreatureSprite(type, creature, creatureData) {
+        const spriteUrl = `/assets/sprites/creatures/${type}.svg`;
+        
+        try {
+            const response = await fetch(spriteUrl);
+            if (response.ok) {
+                const svgText = await response.text();
+                creature.innerHTML = svgText;
+                creature.classList.add('sprite-loaded');
+                console.log(`🦊 Loaded creature sprite: ${type}`);
+            } else {
+                throw new Error(`Sprite not found: ${spriteUrl}`);
+            }
+        } catch (error) {
+            console.log(`Using procedural generation for: ${type}`);
+            // Fallback to generated SVG
+            const svg = this.generateCreatureSVG(creatureData);
+            creature.appendChild(svg);
+            creature.classList.add('creature-fallback');
+        }
     },
     
     generateCreatureSVG(creatureData) {
@@ -207,29 +280,39 @@ const CreatureSystem = {
                 `;
                 break;
                 
-            case 'star':
+            case 'dog':
                 svg.innerHTML = `
-                    <g class="star-body">
-                        <path d="M50 20 L60 40 L80 40 L65 55 L70 75 L50 65 L30 75 L35 55 L20 40 L40 40 Z" 
-                              fill="${creatureData.color}" stroke="#333" stroke-width="2"/>
-                        <circle cx="45" cy="45" r="2" fill="#333"/>
-                        <circle cx="55" cy="45" r="2" fill="#333"/>
-                        <path d="M45 50 Q50 55 55 50" stroke="#333" stroke-width="1.5" fill="none"/>
+                    <g class="dog-body">
+                        <!-- Body -->
+                        <ellipse cx="50" cy="65" rx="30" ry="18" fill="${creatureData.color}" stroke="#333" stroke-width="2"/>
+                        <!-- Head -->
+                        <circle cx="25" cy="50" r="15" fill="${creatureData.color}" stroke="#333" stroke-width="2"/>
+                        <!-- Snout -->
+                        <ellipse cx="15" cy="55" rx="8" ry="5" fill="${creatureData.color}" stroke="#333" stroke-width="2"/>
+                        <!-- Ears -->
+                        <ellipse cx="20" cy="40" rx="6" ry="12" fill="${creatureData.color}" stroke="#333" stroke-width="1" class="ear-left"/>
+                        <ellipse cx="30" cy="40" rx="6" ry="12" fill="${creatureData.color}" stroke="#333" stroke-width="1" class="ear-right"/>
+                        <!-- Eyes -->
+                        <circle cx="20" cy="47" r="3" fill="#FFF" stroke="#333" stroke-width="1"/>
+                        <circle cx="30" cy="47" r="3" fill="#FFF" stroke="#333" stroke-width="1"/>
+                        <circle cx="20" cy="47" r="2" fill="#333" class="pupil-left"/>
+                        <circle cx="30" cy="47" r="2" fill="#333" class="pupil-right"/>
+                        <!-- Nose -->
+                        <circle cx="15" cy="55" r="2" fill="#000"/>
+                        <!-- Tail -->
+                        <path d="M75 60 Q85 50 80 40 Q75 45 70 50" fill="${creatureData.color}" 
+                              stroke="#333" stroke-width="2" class="tail"/>
+                        <!-- Legs -->
+                        <rect x="30" y="75" width="6" height="12" rx="3" fill="${creatureData.color}" stroke="#333" stroke-width="1" class="leg-1"/>
+                        <rect x="40" y="75" width="6" height="12" rx="3" fill="${creatureData.color}" stroke="#333" stroke-width="1" class="leg-2"/>
+                        <rect x="55" y="75" width="6" height="12" rx="3" fill="${creatureData.color}" stroke="#333" stroke-width="1" class="leg-3"/>
+                        <rect x="65" y="75" width="6" height="12" rx="3" fill="${creatureData.color}" stroke="#333" stroke-width="1" class="leg-4"/>
                         
-                        <!-- Sparkles -->
-                        <g class="sparkles">
-                            <circle cx="30" cy="30" r="1" fill="#FFF" opacity="0">
-                                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="70" cy="30" r="1" fill="#FFF" opacity="0">
-                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="30" cy="70" r="1" fill="#FFF" opacity="0">
-                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="1s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="70" cy="70" r="1" fill="#FFF" opacity="0">
-                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="1.5s" repeatCount="indefinite"/>
-                            </circle>
+                        <!-- Social symbols -->
+                        <g class="social-symbols" opacity="0">
+                            <circle cx="50" cy="50" r="2" fill="#FFD700"/>
+                            <text x="55" y="45" font-size="8" fill="#666">👥</text>
+                            <text x="45" y="40" font-size="8" fill="#666">🏛️</text>
                         </g>
                     </g>
                 `;
@@ -318,6 +401,38 @@ const CreatureSystem = {
                     }
                 }
                 break;
+                
+            case 'wag':
+                if (type === 'social-science-dog') {
+                    // Tail wag animation
+                    const tail = svg.querySelector('.tail');
+                    if (tail) {
+                        tail.style.transformOrigin = '75% 60%';
+                        tail.style.animation = 'dogTailWag 0.3s ease-in-out 8';
+                    }
+                    
+                    // Show social symbols
+                    const symbols = svg.querySelector('.social-symbols');
+                    if (symbols) {
+                        symbols.style.transition = 'opacity 1s';
+                        symbols.style.opacity = '1';
+                        
+                        setTimeout(() => {
+                            symbols.style.opacity = '0';
+                        }, 2000);
+                    }
+                }
+                break;
+                
+            case 'bark':
+                if (type === 'social-science-dog') {
+                    // Head bob animation
+                    const head = svg.querySelector('circle[cx="25"][cy="50"]');
+                    if (head) {
+                        head.style.animation = 'dogBark 0.2s ease-in-out 6';
+                    }
+                }
+                break;
         }
     },
     
@@ -380,7 +495,12 @@ const CreatureSystem = {
     
     initWalkingAnimals() {
         const container = document.getElementById('animalsContainer');
-        if (!container) return;
+        if (!container) {
+            console.log('❌ Animals container not found');
+            return;
+        }
+        
+        console.log('✅ Animals container found, initializing walking animals');
         
         // Start spawning animals
         this.spawnWalkingAnimal();
@@ -396,6 +516,8 @@ const CreatureSystem = {
     spawnWalkingAnimal() {
         const container = document.getElementById('animalsContainer');
         const animalData = this.walkingAnimals[Math.floor(Math.random() * this.walkingAnimals.length)];
+        
+        console.log(`🦊 Spawning walking animal: ${animalData.name}`);
         
         const animal = document.createElement('div');
         animal.className = 'walking-animal';
@@ -423,6 +545,8 @@ const CreatureSystem = {
         };
         
         this.activeAnimals.push(animalInstance);
+        
+        console.log(`✅ Animal spawned: ${animalData.name}, total active: ${this.activeAnimals.length}`);
         
         // Start walking animation
         this.animateWalkingAnimal(animalInstance);
@@ -534,6 +658,202 @@ const CreatureSystem = {
         walk();
     },
     
+    // GIF Animals System
+    initGifAnimals() {
+        const container = document.getElementById('topAnimalsContainer');
+        if (!container) {
+            console.log('❌ Top animals container not found, creating it');
+            this.createTopAnimalsContainer();
+        }
+        
+        console.log('✅ Initializing GIF animals system');
+        
+        // Generate initial random sequence
+        this.generateRandomSequence();
+        
+        // Start the animation sequence
+        this.startGifAnimalsSequence();
+        
+        // Set up scroll-triggered animations
+        this.initScrollTriggeredAnimals();
+    },
+    
+    createTopAnimalsContainer() {
+        const container = document.createElement('div');
+        container.id = 'topAnimalsContainer';
+        container.className = 'top-animals-container';
+        document.body.appendChild(container);
+        console.log('✅ Created top animals container');
+    },
+    
+    generateRandomSequence() {
+        // Create a shuffled copy of the gifAnimals array
+        const shuffled = [...this.gifAnimals];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        
+        this.gifAnimalState.currentSequence = shuffled;
+        this.gifAnimalState.sequenceIndex = 0;
+        
+        console.log('🔀 Generated new random sequence:', shuffled.map(a => a.name));
+    },
+    
+    startGifAnimalsSequence() {
+        if (this.gifAnimalState.isRunning) return;
+        
+        this.gifAnimalState.isRunning = true;
+        
+        const playNextAnimal = () => {
+            if (this.gifAnimalState.sequenceIndex >= this.gifAnimalState.currentSequence.length) {
+                // Sequence finished, generate new random sequence
+                console.log('🔄 Sequence finished, generating new random sequence');
+                this.generateRandomSequence();
+            }
+            
+            const animal = this.gifAnimalState.currentSequence[this.gifAnimalState.sequenceIndex];
+            this.spawnGifAnimal(animal);
+            
+            this.gifAnimalState.sequenceIndex++;
+            
+            // Schedule next animal after 10 seconds
+            this.gifAnimalState.intervalId = setTimeout(playNextAnimal, 10000); // 10 second interval
+        };
+        
+        // Start the sequence
+        playNextAnimal();
+        
+        console.log('🎬 Started GIF animals sequence');
+    },
+    
+    stopGifAnimalsSequence() {
+        if (this.gifAnimalState.intervalId) {
+            clearTimeout(this.gifAnimalState.intervalId);
+            this.gifAnimalState.intervalId = null;
+        }
+        this.gifAnimalState.isRunning = false;
+        console.log('⏹️ Stopped GIF animals sequence');
+    },
+    
+    spawnGifAnimal(animalData, scrollTriggered = false) {
+        const container = document.getElementById('topAnimalsContainer');
+        if (!container) return;
+        
+        console.log(`🦁 Spawning GIF animal: ${animalData.name} (speed: ${animalData.speed})`);
+        
+        const animalElement = document.createElement('div');
+        animalElement.className = `gif-animal ${animalData.size}`;
+        
+        if (scrollTriggered) {
+            animalElement.classList.add('scroll-triggered');
+        }
+        
+        // Calculate animation duration based on speed
+        const baseDuration = 8; // Base 8 seconds
+        const speedMultiplier = animalData.speed || 1.0;
+        const animationDuration = baseDuration / speedMultiplier;
+        
+        // Set custom animation duration using CSS custom property
+        animalElement.style.setProperty('--animation-duration', `${animationDuration}s`);
+        // Also set directly as fallback
+        animalElement.style.animationDuration = `${animationDuration}s`;
+        console.log(`🎯 Set animation duration: ${animationDuration}s for ${animalData.name}`);
+        
+        // Create image element
+        const img = document.createElement('img');
+        img.src = `../assets/sprites/animals/gifs/${animalData.filename}`;
+        img.alt = animalData.name;
+        img.draggable = false;
+        
+        // Handle image load error (fallback to placeholder or skip)
+        img.onerror = () => {
+            console.log(`⚠️ Could not load GIF: ${animalData.filename}`);
+            animalElement.remove();
+        };
+        
+        img.onload = () => {
+            console.log(`✅ Loaded GIF: ${animalData.filename}`);
+        };
+        
+        animalElement.appendChild(img);
+        container.appendChild(animalElement);
+        
+        // Trigger animation
+        setTimeout(() => {
+            animalElement.classList.add('active');
+        }, 10);
+        
+        // Clean up after animation completes (use calculated duration)
+        const cleanupTime = (animationDuration * 1000) + 1000; // Add 1 second buffer
+        setTimeout(() => {
+            animalElement.remove();
+        }, cleanupTime);
+        
+        // Play sound effect if available
+        if (typeof AudioEngine !== 'undefined') {
+            AudioEngine.playEffect('firefly-hover');
+        }
+    },
+    
+    initScrollTriggeredAnimals() {
+        let lastScrollY = window.pageYOffset;
+        let scrollVelocity = 0;
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.pageYOffset;
+            scrollVelocity = Math.abs(currentScrollY - lastScrollY);
+            
+            // Trigger animal on significant scroll
+            if (scrollVelocity > this.gifAnimalState.scrollThreshold) {
+                this.triggerScrollAnimal(scrollVelocity);
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+        
+        console.log('📜 Initialized scroll-triggered animals');
+    },
+    
+    triggerScrollAnimal(velocity) {
+        // Don't trigger too frequently - 10 second cooldown
+        const now = Date.now();
+        if (now - (this.gifAnimalState.lastScrollTrigger || 0) < 10000) return;
+        
+        this.gifAnimalState.lastScrollTrigger = now;
+        
+        // Pick a random animal for scroll trigger
+        const randomAnimal = this.gifAnimals[Math.floor(Math.random() * this.gifAnimals.length)];
+        
+        // Add speed class based on scroll velocity
+        const scrollTriggered = velocity > this.gifAnimalState.scrollThreshold * 2;
+        
+        this.spawnGifAnimal(randomAnimal, scrollTriggered);
+        
+        console.log(`🏃 Scroll-triggered animal: ${randomAnimal.name} (velocity: ${velocity})`);
+    },
+    
+    // Method to manually add a specific animal (for when you add new GIFs)
+    addAnimalToSequence(letter) {
+        const animal = this.gifAnimals.find(a => a.name === letter.toLowerCase());
+        if (animal) {
+            this.spawnGifAnimal(animal);
+            console.log(`🎯 Manually spawned animal: ${letter}`);
+            return true;
+        } else {
+            console.log(`❌ Animal not found: ${letter}`);
+            return false;
+        }
+    },
+    
+    // Method to restart the sequence (useful for testing)
+    restartGifSequence() {
+        this.stopGifAnimalsSequence();
+        this.generateRandomSequence();
+        this.startGifAnimalsSequence();
+        console.log('🔄 Restarted GIF animals sequence');
+    },
+    
     showCreature(creatureType) {
         const creature = this.activeCreatures.get(creatureType);
         if (creature) {
@@ -578,6 +898,17 @@ creatureStyles.textContent = `
     @keyframes butterflyWingFlap {
         0%, 100% { transform: scaleX(1); }
         50% { transform: scaleX(0.3); }
+    }
+    
+    @keyframes dogTailWag {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(20deg); }
+        75% { transform: rotate(-20deg); }
+    }
+    
+    @keyframes dogBark {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
     }
     
     @keyframes breathParticle {

@@ -4,6 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fluence Learning Universe</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Fluence">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- PWA Icons -->
+    <link rel="apple-touch-icon" href="/fluence-icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/fluence-icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/fluence-icon-512.png">
+
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="/assets/sounds/effects/sparkle.mp3" as="fetch" type="audio/mpeg">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=EB+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -86,5 +105,23 @@
             <a href="https://github.com/AmanRajYadav/daily-report">GitHub</a>
         </div>
     </div>
+    
+    <!-- Install container for PWA -->
+    <div class="install-container"></div>
+    
+    <!-- Utility Scripts -->
+    <script src="/utils/lazy-loader.js"></script>
+    <script src="/utils/pwa-installer.js"></script>
+    <script src="/utils/performance-monitor.js"></script>
+    <script src="/utils/offline-manager.js"></script>
+    <script src="/utils/app-initializer.js"></script>
+    <script>
+        // Register service worker fallback
+        if ('serviceWorker' in navigator && !window.fluenceApp) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(reg => console.log('SW registered'))
+                .catch(err => console.log('SW registration failed'));
+        }
+    </script>
 </body>
 </html>

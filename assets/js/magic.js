@@ -346,12 +346,12 @@ const MagicalInteractions = {
                 this.createScrollParticles(scrollDelta);
             }
             
-            // Parallax magic
-            document.querySelectorAll('.floating-card').forEach((card, index) => {
-                const speed = 0.5 + (index * 0.1);
-                const yPos = -(scrollY * speed * 0.1);
-                card.style.transform = `translateY(${yPos}px)`;
-            });
+            // Parallax magic - disabled for static cards
+            // document.querySelectorAll('.floating-card').forEach((card, index) => {
+            //     const speed = 0.5 + (index * 0.1);
+            //     const yPos = -(scrollY * speed * 0.1);
+            //     card.style.transform = `translateY(${yPos}px)`;
+            // });
             
             lastScrollY = scrollY;
         });

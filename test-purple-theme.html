@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="purple">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Purple Theme Test · Learning Universe</title>
+    <meta name="description" content="Testing purple theme with golden accents">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/themes/purple.css" id="theme-stylesheet">
+    
+    <style>
+        /* Dynamic student color */
+        :root {
+            --student-hue: 45;
+            --student-accent: hsl(var(--student-hue), 70%, 60%);
+            --student-accent-soft: hsl(var(--student-hue), 60%, 95%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <main class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-particles" id="heroParticles"></div>
+            
+            <div class="date-badge floating">January 15, 2025</div>
+            
+            <h1 class="student-name magical-text" style="opacity: 1; transform: translateY(0px); cursor: pointer; transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);" title="Click to see magic!">
+                anaya
+                <span class="name-sparkles"></span>
+            </h1>
+
+            <p class="hero-greeting" style="opacity: 1; transform: translateY(0px); transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);">Welcome back to your learning universe</p>
+        </section>
+    </main>
+
+    <!-- Theme Switcher -->
+    <script src="assets/js/theme-switcher.js"></script>
+    
+    <script>
+        // Simple test to show the theme is working
+        console.log('Purple theme test loaded');
+        console.log('H1 should be Golden Yellow (#FFD700)');
+        console.log('Hero greeting should be white');
+        console.log('Click the theme toggle button (✨) to switch themes');
+    </script>
+</body>
+</html> 
