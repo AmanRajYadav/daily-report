@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="minimal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Debug Test</title>
+    
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/themes/minimal.css" id="theme-stylesheet">
+    
+    <style>
+        :root {
+            --student-hue: 200;
+            --student-accent: hsl(var(--student-hue), 70%, 60%);
+            --student-accent-soft: hsl(var(--student-hue), 60%, 95%);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="magic-circle">
+                <svg viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="80" class="circle-outer" />
+                    <circle cx="100" cy="100" r="60" class="circle-middle" />
+                    <circle cx="100" cy="100" r="40" class="circle-inner" />
+                </svg>
+            </div>
+            <p class="loading-text">Debug loading...</p>
+        </div>
+    </div>
+
+    <div class="universe-container">
+        <canvas id="magicCanvas"></canvas>
+        <div class="parallax-layer" data-depth="0.1">
+            <div class="clouds"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.5">
+            <div class="fireflies"></div>
+        </div>
+    </div>
+
+    <div class="learning-tree-container">
+        <div class="tree-stage" id="learningTree"></div>
+        <div class="tree-info">
+            <span class="visits-count">Visit #<span id="visitNumber">1</span></span>
+            <span class="tree-stage-name" id="treeStageName">Seedling</span>
+        </div>
+    </div>
+
+    <div class="top-animals-container" id="topAnimalsContainer"></div>
+    <div class="animals-container" id="animalsContainer"></div>
+
+    <main class="content-wrapper">
+        <section class="hero-section" id="heroSection">
+            <div class="hero-particles" id="heroParticles"></div>
+            <h1 class="student-name magical-text">Test Student</h1>
+            <p class="hero-greeting">Debug test page</p>
+            
+            <div class="subject-creature-container">
+                <div class="creature-home" id="creatureHome"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="assets/js/universe.js"></script>
+    <script src="assets/js/creatures.js"></script>
+    <script src="assets/js/audio.js"></script>
+    <script src="assets/js/particles.js"></script>
+    <script src="assets/js/tree.js"></script>
+    <script src="assets/js/features.js"></script>
+    
+    <script>
+        window.STUDENT_DATA = {
+            name: 'Test Student',
+            id: 'test',
+            hue: 200,
+            subject: 'Debug Test',
+            visitCount: 1
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔧 Starting debug initialization...');
+            Universe.init();
+        });
+    </script>
+</body>
+</html>
