@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="minimal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Kavya · Learning Universe</title>
+    <meta name="description" content="A magical learning journey">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/themes/minimal.css" id="theme-stylesheet">
+    
+    <style>
+        /* Enhanced minimal theme with better color consistency */
+        :root {
+            --student-hue: 270;
+            --student-accent: hsl(var(--student-hue), 70%, 60%);
+            --student-accent-soft: hsl(var(--student-hue), 60%, 95%);
+            --student-accent-dark: hsl(var(--student-hue), 70%, 45%);
+            
+            /* Enhanced minimal color palette */
+            --paper-white: #ffffff;
+            --paper-cream: #fafafa;
+            --ink-dark: #1a1a1a;
+            --ink-medium: #4a4a4a;
+            --ink-light: #6b6b6b;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            
+            /* Enhanced shadows */
+            --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-strong: 0 8px 32px rgba(0, 0, 0, 0.12);
+            
+            /* Enhanced borders */
+            --border-light: 1px solid rgba(0, 0, 0, 0.08);
+            --border-medium: 1px solid rgba(0, 0, 0, 0.12);
+            --radius-small: 12px;
+            --radius-medium: 16px;
+            --radius-large: 24px;
+        }
+        
+        /* Enhanced card styling */
+        .content-card {
+            background: var(--paper-white);
+            border-radius: var(--radius-medium);
+            box-shadow: var(--shadow-soft);
+            border: var(--border-light);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-strong);
+            border-color: var(--student-accent);
+        }
+        
+        .content-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--student-accent), var(--accent-purple), var(--accent-blue));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .content-card:hover::before {
+            opacity: 1;
+        }
+        
+        /* Enhanced card header */
+        .card-header {
+            padding: 24px 24px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: var(--border-light);
+            background: linear-gradient(135deg, var(--paper-cream), var(--paper-white));
+        }
+        
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-small);
+            background: linear-gradient(135deg, var(--student-accent), var(--student-accent-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .section-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--ink-dark);
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        
+        /* Enhanced card content */
+        .card-content {
+            padding: 20px 24px 24px;
+            color: var(--ink-medium);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        
+        .card-content p {
+            margin-bottom: 16px;
+        }
+        
+        .card-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Black & Red Arcade Button with Star Effects */
+        .arcade-button {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #ff0000 70%, #cc0000 100%) !important;
+            background-size: 300% 300% !important;
+            animation: blackRedShift 2s ease-in-out infinite !important;
+            color: white !important;
+            padding: 24px 40px;
+            border-radius: var(--radius-large);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 32px rgba(255, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        @keyframes blackRedShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .arcade-button:hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(255, 0, 0, 0.6);
+            color: white !important;
+            border-color: rgba(255, 0, 0, 0.8);
+            animation: blackRedShift 1s ease-in-out infinite, buttonGlow 0.8s ease-in-out infinite;
+        }
+        
+        @keyframes buttonGlow {
+            0%, 100% { box-shadow: 0 15px 50px rgba(255, 0, 0, 0.6); }
+            50% { box-shadow: 0 15px 50px rgba(255, 0, 0, 0.9), 0 0 30px rgba(255, 255, 255, 0.3); }
+        }
+        
+        .arcade-button .button-text {
+            position: relative;
+            z-index: 4;
+            color: white !important;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        
+        .arcade-button .button-icon {
+            position: relative;
+            z-index: 4;
+            color: white !important;
+            font-size: 1.4rem;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes iconBounce {
+            0%, 50%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-3px); }
+            75% { transform: translateY(-1px); }
+        }
+        
+        /* Star effects on hover */
+        .arcade-button:hover::before {
+            content: "★ ★ ★ ★ ★";
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffff00;
+            font-size: 14px;
+            z-index: 3;
+            animation: starTwinkle 1s ease-in-out infinite;
+        }
+        
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(0.8); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+        }
+        
+        .arcade-button::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: all 0.4s ease;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        
+        .arcade-button:hover::after {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 255, 0, 0.3) 0%, rgba(255, 0, 0, 0.2) 50%, transparent 70%);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="magic-circle">
+                <svg viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="80" class="circle-outer" />
+                    <circle cx="100" cy="100" r="60" class="circle-middle" />
+                    <circle cx="100" cy="100" r="40" class="circle-inner" />
+                </svg>
+            </div>
+            <p class="loading-text">Preparing your magical journey...</p>
+        </div>
+    </div>
+    
+    <div class="universe-container">
+        <canvas id="magicCanvas"></canvas>
+        
+        <div class="parallax-layer" data-depth="0.1">
+            <div class="clouds"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.3">
+            <div class="floating-elements"></div>
+        </div>
+        <div class="parallax-layer" data-depth="0.5">
+            <div class="fireflies"></div>
+        </div>
+    </div>
+
+    <div class="learning-tree-container">
+        <div class="tree-stage" id="learningTree"></div>
+        <div class="tree-info">
+            <span class="visits-count">Visit #<span id="visitNumber">1</span></span>
+            <span class="tree-stage-name" id="treeStageName">Seedling</span>
+        </div>
+    </div>
+    
+    <div class="top-animals-container" id="topAnimalsContainer">
+    </div>
+    
+    <div class="animals-container" id="animalsContainer">
+    </div>
+
+    <main class="content-wrapper">
+        <section class="hero-section" id="heroSection">
+            <div class="hero-particles" id="heroParticles"></div>
+            
+            <div class="date-badge floating">10 October 2025</div>
+            
+            <h1 class="student-name magical-text">
+                Kavya
+                <span class="name-sparkles"></span>
+            </h1>
+            
+            <p class="hero-greeting">Welcome back to your learning universe</p>
+        </section>
+
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="star">
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M24 4l5.5 11.1L42 17l-9 8.8L35.1 38 24 32.2 12.9 38 15 25.8 6 17l12.5-1.9z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Today&#39;s Reflection</h2>
+            </header>
+            
+            <div class="card-content">
+                <p class="reflection-text">
+                    🌟 Amazing work today, Kavya! You tackled a tricky math puzzle by learning to break it into smaller pieces. Your curiosity in our new science chapter on food was fantastic! 🚀
+                </p>
+            </div>
+        </section>
+
+        <section class="content-card floating-card" data-sound="page-turn" data-creature="math-dragon">
+            <div class="subject-creature-container">
+                <div class="creature-home" id="creatureHome">
+                </div>
+            </div>
+            
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path class="icon-path" d="M4 6h8c2.2 0 4 1.8 4 4v28c0-1.7-1.3-3-3-3H4V6zm40 0h-8c-2.2 0-4 1.8-4 4v28c0-1.7 1.3-3 3-3h9V6z"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">What We Explored</h2>
+            </header>
+            
+            <div class="subject-badge magical-badge">Math & Science: Becoming an Architect and a Nutritionist!</div>
+            
+            <div class="card-content">
+                <p class="learning-content">
+                    Today's adventure: We learned that solving big, scary problems is often just about finding the small, easy problems hiding inside! We discovered that you can find the area of any weird shape, like a room in a house blueprint, by cleverly splitting it into simple rectangles and triangles. In science, we became nutrition detectives, uncovering the secrets inside our food. We learned that carbohydrates are like the gasoline for our body's car (providing quick energy), while proteins are the construction crew that repairs and builds everything. This connects to our math lesson because a 'balanced diet' is like a well-designed house – it needs all the right parts in the right amounts to be strong and healthy!
+                </p>
+            </div>
+        </section>
+
+                <section class="content-card floating-card activity-card" data-sound="chime" data-creature="rocket">
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <circle cx="24" cy="24" r="20" class="clock-circle"/>
+                        <path class="clock-hand" d="M24 12v12l8 4"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Your Mission</h2>
+            </header>
+            
+            <div class="mission-name">🎯 My Super-Meal Blueprint</div>
+            
+            <div class="card-content">
+                <div class="mission-description">
+                    <p>Your mission: Design the ultimate balanced meal for your favorite superhero or cartoon character! Step 1: On a piece of paper, draw a plate. Step 2: Draw or cut out pictures of different foods to put on the plate (e.g., roti, dal, salad, curd, fruit). Step 3: Next to each food item, label the main nutrient it provides (Carbohydrate, Protein, Fat, Vitamin, etc.). Bonus challenge: Write one sentence explaining why your superhero needs this specific meal to save the day!</p>
+                </div>
+                
+                <div class="mission-motivation">
+                    <span class="sparkle-text">✨ Why it&#39;s amazing:</span>
+                    <p>This activity is awesome because it turns you into a nutrition expert! It helps your brain remember the different food groups and what they do for your body. You'll develop the real-life skill of building a healthy plate, and you can even show your family your Super-Meal Blueprint and teach them how to eat like a hero!</p>
+                </div>
+            </div>
+            
+            <div class="hidden-treasure" id="hiddenTreasure">
+                <span class="treasure-emoji">🎁</span>
+                <p class="treasure-message">Secret discovered! You&#39;re amazing!</p>
+            </div>
+        </section>
+
+                <section class="content-card floating-card parent-card" data-sound="notification">
+            <header class="card-header">
+                <div class="section-icon animated-icon">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M31 28v-4c0-3.3-2.7-6-6-6h-10c-3.3 0-6 2.7-6 6v4"/>
+                        <circle cx="20" cy="10" r="6"/>
+                        <path d="M39 28v-4c0-2.8-1.9-5.1-4.5-5.8"/>
+                        <path d="M33 4.2c2.6.7 4.5 3 4.5 5.8s-1.9 5.1-4.5 5.8"/>
+                    </svg>
+                </div>
+                <h2 class="section-title">Family Update</h2>
+            </header>
+            
+            <div class="parent-report-grid">
+                <div class="report-item">
+                    <h3 class="report-label">Today&#39;s Focus</h3>
+                    <p>Development of problem-solving skills through decomposition in math, and foundational health literacy in science.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Progress Made</h3>
+                    <p>Key concepts: Area of complex shapes by breaking them into rectangles/triangles; the 'why' behind a balanced diet; roles of Carbohydrates (energy), Proteins (building), and Fats (storage/flavor). We used a house blueprint as a practical math example and Kavya's own lunch to discuss nutrition concepts.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Home Practice</h3>
+                    <p>Math: Complete the area problems on the provided worksheet by breaking down the shapes. Science: Read the next sections in the 'Components of Food' chapter (Vitamins, Minerals, etc.) to prepare for tomorrow. Expected time: 15-20 minutes.</p>
+                </div>
+                
+                <div class="report-item">
+                    <h3 class="report-label">Special Notes</h3>
+                    <p>💡 Breakthrough moment: Kavya had a fantastic 'aha!' moment when she realized the formula for a triangle's area was different from just counting the base squares. She then successfully applied the formula to solve the problem. Growth area: We're working on maintaining focused energy when introduced to dense new topics. Reframing the lesson as a 'detective' mission helped increase engagement today. Ask your child to show you the 'house map puzzle' and explain her strategy! To support at home: When preparing a meal, you could casually point out the different components, e.g., 'This dal gives us protein to make us strong!'</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="arcade-portal-section">
+            <div class="portal-container">
+                <div class="portal-rings">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                </div>
+                
+                <a href="https://amanrajyadav.github.io/fluence-quiz/" class="arcade-button magical-button">
+                    <span class="button-text">Enter Learning Arcade</span>
+                    <span class="button-icon">🎮</span>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <div class="shake-overlay" id="shakeOverlay">
+        <div class="stardust-container" id="stardustContainer"></div>
+        <div class="shake-message">
+            <h3>✨ Magic Unlocked! ✨</h3>
+            <p>You found a hidden surprise!</p>
+        </div>
+    </div>
+    
+    <script src="../assets/js/universe.js"></script>
+    <script src="../assets/js/creatures.js"></script>
+    <script src="../assets/js/audio.js"></script>
+    <script src="../assets/js/particles.js"></script>
+    <script src="../assets/js/tree.js"></script>
+    <script src="../assets/js/features.js"></script>
+    <script src="../assets/js/magic.js"></script>
+    
+    <script>
+        console.log("🔧 Initialization script starting...");
+        
+        // Initialize with student data
+        window.STUDENT_DATA = {
+            name: "Kavya",
+            id: "student2",
+            hue: 270,
+            subject: "Math & Science: Becoming an Architect and a Nutritionist!",
+            visitCount: parseInt(localStorage.getItem("visits_student2") || "0") + 1
+        };
+        
+        console.log("🔧 Student data set:", window.STUDENT_DATA);
+        console.log("🔧 Universe object available:", typeof Universe);
+        
+        // Start the magic - IMMEDIATE INITIALIZATION
+        console.log("🔧 About to call Universe.init()...");
+        Universe.init();
+        console.log("🔧 Universe.init() called successfully");
+    </script>
+</body>
+</html>
